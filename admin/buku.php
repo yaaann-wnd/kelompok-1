@@ -12,8 +12,8 @@ include 'config.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap/css/style.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/style.css">
 </head>
 
 <body>
@@ -41,12 +41,12 @@ include 'config.php';
 
     <div class="buku-outer container mt-4">
         <div class="card">
-            <div class="card-header">
+            <div class="text-white card-header bg-success bg-opacity-75">
                 <h4>Data Buku</h4>
             </div>
             <div class="card-body">
                 <div class="tabel">
-                    <table class="table table-sm text-center">
+                    <table class="table table-bordered text-center">
                         <thead class="bg-success text-white bg-opacity-75 text-center">
                             <tr>
                                 <th scope="col">ID Buku</th>
@@ -54,6 +54,7 @@ include 'config.php';
                                 <th scope="col">Tahun</th>
                                 <th scope="col">Judul</th>
                                 <th scope="col">Penerbit</th>
+                                <th scope="col">Kota</th>
                                 <th scope="col">Cover</th>
                                 <th scope="col">Sinopsis</th>
                                 <th scope="col">Stok</th>
@@ -70,11 +71,12 @@ include 'config.php';
                                 <td><?= $data['tahun'] ?></td>
                                 <td><?= $data['judul'] ?></td>
                                 <td><?= $data['penerbit'] ?></td>
-                                <td><img src="bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="75px" alt=""></td>
+                                <td><?= $data['kota'] ?></td>
+                                <td><img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="75px" alt=""></td>
                                 <td><?= $data['sinopsis'] ?></td>
                                 <td><?= $data['stok'] ?></td>
                                 <td class="text-center">
-                                    <a href="edit.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-primary">Edit</a>
+                                    <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-primary">Edit</a>
                                     <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-danger">Hapus</a>
                                 </td>
                             </tr>
@@ -93,7 +95,7 @@ include 'config.php';
 
 
 
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
