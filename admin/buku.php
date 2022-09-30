@@ -90,7 +90,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0">
-                                    <thead>
+                                    <thead class="text-center">
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Buku</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penulis</th>
@@ -145,7 +145,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <img src="../bootstrap/img/<?= $data ['cover']?>" class="rounded-4" width="75px" alt="">
+                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
                                                     </div>
                                                 </td>
                                                 <td>
@@ -158,17 +158,9 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                                         <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
                                                     </div>
                                                 </td>
-                                                <!-- <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-success"><?php echo $data['jenis_kelamin'] ?></span>
-                                                </td> -->
                                                 <td class="align-middle">
-                                                    <!-- <a data-bs-toggle="modal" data-bs-target="#exampleModal" href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                        Edit
-                                                    </a>&nbsp;
-                                                    <a onclick="funcdel(${posts.id})" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                        Delete
-                                                    </a> -->
-                                                    
+                                                    <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-primary">Edit</a>
+                                                    <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php
@@ -176,6 +168,9 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="text-center my-4">
+                                <a href="tambahbuku.php" class="btn btn-primary mx-auto">Tambah Buku</a>
                             </div>
                         </div>
                     </div>

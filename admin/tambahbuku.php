@@ -1,5 +1,26 @@
 <?php
+
 include 'config.php';
+
+if (isset($_POST['submit'])) {
+    $id_buku = $_POST['id_buku'];
+    $penulis = $_POST['penulis'];
+    $judul = $_POST['judul'];
+    $tahun = $_POST['tahun'];
+    $penerbit = $_POST['penerbit'];
+    $kota = $_POST['kota'];
+    $sinopsis = $_POST['sinopsis'];
+    $stok = $_POST['stok'];
+    $cover = $_FILES['cover']['name'];
+    $tmp_name = $_FILES['cover']['tmp_name'];
+    move_uploaded_file($tmp_name, "../bootstrap/img/" . $cover);
+
+    $query = mysqli_query($db, "INSERT INTO buku(penulis, judul, tahun, penerbit, kota, sinopsis, stok, cover) values ('$penulis', '$judul', '$tahun', '$penerbit', '$kota', '$sinopsis', '$stok', '$cover')");
+
+    if ($query) {
+        header("location:buku.php");
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -72,76 +93,58 @@ include 'config.php';
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="form-wrapper">
                                 <div class="judul text-center my-4">
-                                    <h3>Edit Buku</h3>
+                                    <h3>Tambah Buku</h3>
                                 </div>
-                                <form action="editbukuproses.php" method="post" enctype="multipart/form-data">
-                                    <?php
-                                    $id = $_GET['id'];
-                                    $ambil = mysqli_query($db, "select * from buku where id_buku='$id'");
-                                    while ($data = mysqli_fetch_array($ambil)) {
+                                <!-- start form -->
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <div class="input-1 w-50 ms-auto">                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Penulis</label>
+                                                    <input type="text" class="form-control" name="penulis">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Judul</label>
+                                                    <input type="text" class="form-control" name="judul">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tahun</label>
+                                                    <input type="number" class="form-control" min="1900" max="2099" name="tahun">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Penerbit</label>
+                                                    <input type="text" class="form-control" name="penerbit">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-2 w-50">
+                                                <div>
+                                                    <label class="form-label">Kota</label>
+                                                    <input type="text" class="form-control" name="kota">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sinopsis</label>
+                                                    <textarea name="sinopsis" class="form-control" rows="3"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Stok</label>
+                                                    <input type="number" class="form-control" name="stok">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Cover</label>
+                                                    <input type="file" class="form-control" name="cover">
+                                                </div>
 
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <div class="input-1 w-50 ms-auto">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="idm">ID Buku</label>
-                                                        <input type="text" id="idm" class="form-control" readonly name="id_buku" value="<?php echo $data['id_buku']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Penulis</label>
-                                                        <input type="text" class="form-control" name="penulis" value="<?php echo $data['penulis']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Judul</label>
-                                                        <input type="text" class="form-control" name="judul" value="<?php echo $data['judul']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Tahun</label>
-                                                        <input type="number" class="form-control" min="1900" max="2099" name="tahun" value="<?php echo $data['tahun']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Penerbit</label>
-                                                        <input type="text" class="form-control" name="penerbit" value="<?php echo $data['penerbit']; ?>">
-                                                    </div>
-                                                    <div>
-                                                        <label class="form-label">Kota</label>
-                                                        <input type="text" class="form-control" name="kota" value="<?php echo $data['kota']; ?>">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="input-2 w-50">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Sinopsis</label>
-                                                        <textarea name="sinopsis" class="form-control" rows="3"><?php echo $data['sinopsis']; ?></textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Stok</label>
-                                                        <input type="number" class="form-control" name="stok" value="<?php echo $data['stok']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Cover</label>
-                                                        <input type="file" class="form-control" name="cover">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label d-block">Cover sebelumnya : </label>
-                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="70px" alt="">
-                                                        <?php
-                                                        if ($data['cover'] == "") { ?>
-                                                            <img src="https://via.placeholder.com/500x500.png?text=PAS+FOTO+SISWA" width="70px" class="rounded">
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
-                                        </div>
-                                    <?php
-                                    }
-                                    ?>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
+                                    </div>
                                 </form>
+                                <!-- end form -->
                             </div>
                             <!-- <div class="table-responsive p-0"></div> -->
                         </div>
@@ -151,7 +154,7 @@ include 'config.php';
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3">
+            <footer class="footer pt-3 my-4">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -254,37 +257,8 @@ include 'config.php';
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Name</label>
-                            <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
-                        </div>
-                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- end Modal -->
+
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -308,4 +282,3 @@ include 'config.php';
 </body>
 
 </html>
-
