@@ -14,7 +14,7 @@
 -->
 <?php
 include '../config.php';
-$result = mysqli_query($db, "SELECT * FROM petugas");
+$result = mysqli_query($db, "SELECT * FROM kelas");
 
 ?>
 <!DOCTYPE html>
@@ -82,16 +82,15 @@ $result = mysqli_query($db, "SELECT * FROM petugas");
           <div class="col-12">
             <div class="card mb-4">
               <div class="card-header pb-0">
-                <a href="add.php"><button type="submit" class="btn btn-primary">Tambah Petugas</button></a>
+                <a href="add.php"><button type="submit" class="btn btn-primary">Tambah Kelas</button></a>
               </div>
               <div class="card-body px-0 pt-0 pb-2">
                 <div class="table-responsive p-0">
                   <table class="table align-items-center mb-0">
                     <thead>
                       <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Kelas</th>
                         <th class="text-secondary opacity-7"></th>
                       </tr>
                     </thead>
@@ -103,23 +102,20 @@ $result = mysqli_query($db, "SELECT * FROM petugas");
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                            <h6 class="mb-0 text-sm"><?php echo $data['id_kelas'] ?></h6>
                           </div>
                         </div>
                       </td>
                       <td>
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm"><?php echo $data['alamat'] ?></h6>
+                          <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
                         </div>      
                       </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"><?php echo $data['jenis_kelamin'] ?></span>
-                      </td>
                       <td class="align-middle">
-                      <a href="edit.php?id=<?php echo $data['nip'] ?>"  href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                      <a href="edit.php?id=<?php echo $data['id_kelas'] ?>"  href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                         Edit
                       </a>&nbsp;
-                      <a href="delete.php?id=<?php echo $data['nip'] ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                      <a href="delete.php?id=<?php echo $data['id_kelas'] ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                           Delete
                       </a>
                       </td>
