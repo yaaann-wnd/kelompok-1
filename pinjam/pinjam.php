@@ -14,16 +14,13 @@
 -->
 <?php
 include '../config.php';
+$result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminjaman.tgl_pinjam, peminjaman.tgl_kembali FROM buku JOIN detail_peminjaman JOIN peminjaman JOIN petugas JOIN pengembalian JOIN siswa ON buku.id_buku=detail_peminjaman.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_petugas=petugas.nip AND peminjaman.id_peminjaman=pengembalian.id_pengembalian AND peminjaman.id_peminjaman=siswa.nis;");
+// while($tes = mysqli_fetch_array($result)){
+//   // echo $tes[1]['nama'];
+//   var_dump($tes[1]);
 
-$id = $_GET['id'];
-// echo $id;
-$result = mysqli_query($db, "SELECT * FROM kelas WHERE id_kelas=$id");
-
-while($user_data = mysqli_fetch_array($result)) {
-  $nama = $user_data['nama_kelas'];
-  
-}
-
+// }
+// die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,29 +83,72 @@ while($user_data = mysqli_fetch_array($result)) {
 
       <!-- body content -->
       <div class="container-fluid py-4">
-        
-        <!-- <div class="posts-list">data</div> -->
-        <form method="post">
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" value="<?php echo $nama ?>"  id="exampleInputEmail1" aria-describedby="emailHelp">
+        <div class="row">
+          <div class="col-12">
+            <div class="card mb-4">
+              <div class="card-header pb-0">
+                <a href="add.php"><button type="submit" class="btn btn-primary">Tambah Petugas</button></a>
+              </div>
+              <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Siswa</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Petugas</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul Buku</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Peminjaman</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
+                        <th class="text-secondary opacity-7"></th>
+                      </tr>
+                    </thead>
+                    <tbody class="posts-list">
+                      <?php 
+                      while($data = mysqli_fetch_array($result)){
+                      ?>
+                    <tr>                        
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm"><?php echo $data[0]; ?></h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm"><?php echo $data[1] ?></h6>
+                        </div>      
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="mb-0 text-sm"><?php echo $data[2] ?></span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="mb-0 text-sm"><?php echo $data[3] ?></span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="mb-0 text-sm"><?php echo $data[4] ?></span>
+                      </td>
+                      <td class="align-middle">
+                      <a href="edit.php?id=<?php echo $data['nip'] ?>"  href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        Edit
+                      </a>&nbsp;
+                      <a href="delete.php?id=<?php echo $data['nip'] ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Delete
+                      </a>
+                      </td>
+                    </tr>
+                    <?php
+                    }?>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
-          <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <?php
-          if (isset($_POST['submit'])) {
-            $nama=$_POST['name'];
-            if ($nama != null || $gender != null || $address != null || $password != null) {
-              # code...
-
-              $update = mysqli_query($db, "UPDATE `kelas` SET `nama_kelas` = '$nama' WHERE `kelas`.`id_kelas` = $id;");
-              header('Location: kelas.php');
-            }else {
-              # code...
-                echo "<script>alert('asd'); </script>";
-            }
-          }
-        ?>
+        </div>
+        <!-- <div class="posts-list">data</div> -->
+        
         <!-- end body content -->
         <footer class="footer pt-3">
           <div class="container-fluid">
@@ -219,6 +259,37 @@ while($user_data = mysqli_fetch_array($result)) {
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label" >Name</label>
+                <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
+              </div>
+              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -227,6 +298,12 @@ while($user_data = mysqli_fetch_array($result)) {
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     
     <script>
+      function update(a, b, c, d) {
+        document.getElementById("updatenama").value = b;
+        document.getElementById("updateemail").value = c;
+        document.getElementById("updatepassword").value = d;
+        updateid = a;
+      }
       
       var win = navigator.platform.indexOf("Win") > -1;
       if (win && document.querySelector("#sidenav-scrollbar")) {

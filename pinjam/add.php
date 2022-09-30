@@ -15,14 +15,6 @@
 <?php
 include '../config.php';
 
-$id = $_GET['id'];
-// echo $id;
-$result = mysqli_query($db, "SELECT * FROM kelas WHERE id_kelas=$id");
-
-while($user_data = mysqli_fetch_array($result)) {
-  $nama = $user_data['nama_kelas'];
-  
-}
 
 ?>
 <!DOCTYPE html>
@@ -93,16 +85,29 @@ while($user_data = mysqli_fetch_array($result)) {
             <label for="exampleInputEmail1" class="form-label">Name</label>
             <input type="text" name="name" class="form-control" value="<?php echo $nama ?>"  id="exampleInputEmail1" aria-describedby="emailHelp">
           </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1"  class="form-label">Gender</label>
+            <input type="text" name="gender" class="form-control" value="<?php echo $jenis_kelamin ?>"  id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1"   class="form-label">Address</label>
+            <input type="text" name="address" class="form-control" value="<?php echo $alamat ?>" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" value="<?php echo $alamat ?>" id="exampleInputPassword1">
+          </div>
           <button type="submit" name="submit" class="btn btn-primary">Submit</button>
         </form>
         <?php
           if (isset($_POST['submit'])) {
             $nama=$_POST['name'];
+            $gender=$_POST['gender'];
+            $address=$_POST['address'];
+            $password=$_POST['password'];
             if ($nama != null || $gender != null || $address != null || $password != null) {
               # code...
-
-              $update = mysqli_query($db, "UPDATE `kelas` SET `nama_kelas` = '$nama' WHERE `kelas`.`id_kelas` = $id;");
-              header('Location: kelas.php');
+              addpetugas($nama,$gender,$address,$password);
             }else {
               # code...
                 echo "<script>alert('asd'); </script>";
