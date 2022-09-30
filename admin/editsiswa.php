@@ -133,7 +133,7 @@ include 'config.php';
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
+                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
                                     </div>
                                     <?php
                                     }

@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
     $kelas = $_POST['kelas'];
 
 
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values ('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
+    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
 
     if ($query) {
         header("location:siswa.php");
@@ -115,8 +115,8 @@ if (isset($_POST['submit'])) {
                                             <select class="form-select" aria-label="Default select example"name="kelas">
                                                 <option disabled selected>-- Pilih Jurusan --</option>
                                                 <?php
-                                                $ambil = mysqli_query($db, "select * from kelas");
-                                                while ($data = mysqli_fetch_array($ambil)) {
+                                                    $ambil = mysqli_query($db, "select * from kelas");
+                                                    while ($data = mysqli_fetch_array($ambil)) {
                                                     echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
                                                 }
                                                 ?>
@@ -124,7 +124,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
+                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
                                     </div>
                                 </form>
                                 <!-- end form -->

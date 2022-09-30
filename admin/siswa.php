@@ -122,8 +122,8 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                                                     </div>
                                                 </td>                                                
                                                 <td class="text-center">
-                                                    <a href="editsiswa.php?id=<?php echo $data['nis']; ?>" class="btn btn-primary">Edit</a>
-                                                    <a href="deletesiswa.php?id=<?php echo $data['nis']; ?>" class="btn btn-danger">Delete</a>
+                                                    <a href="editsiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-primary">Edit</a>
+                                                    <a href="deletesiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php
@@ -134,7 +134,7 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                                 </table>
                             </div>
                             <div class="text-center my-4">
-                                <a href="tambahsiswa.php" class="btn btn-primary mx-auto">Tambah Siswa</a>
+                                <a href="tambahsiswa.php" class="btn bg-gradient-primary mx-auto">Tambah Siswa</a>
                             </div>
                         </div>
                     </div>
