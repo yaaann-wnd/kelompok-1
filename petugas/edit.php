@@ -13,8 +13,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <?php
-include 'config.php';
-$result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=kelas.id_kelas");
+include '../config.php';
+
+$id = $_GET['id'];
+// echo $id;
+$result = mysqli_query($db, "SELECT * FROM petugas WHERE id='$id");
+while($user_data = mysqli_fetch_array($result)) {
+  // $nama = $user_data['nama'];
+  // $alamat = $user_data['alamat'];
+}
 
 ?>
 <!DOCTYPE html>
@@ -22,25 +29,25 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <title>Perpustakaan Web App</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
-    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" href="assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
+    <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
 
   </head>
 
   <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include 'sidemenu.php';?>
+    <?php include '../sidemenu.php';?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
       <!-- Navbar -->
@@ -78,68 +85,7 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
 
       <!-- body content -->
       <div class="container-fluid py-4">
-        <div class="row">
-          <div class="col-12">
-            <div class="card mb-4">
-              <div class="card-header pb-0">
-                <h6>Authors table</h6>
-              </div>
-              <div class="card-body px-0 pt-0 pb-2">
-                <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kelas</th>
-                        <th class="text-secondary opacity-7"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="posts-list">
-                      <?php 
-                      while($data = mysqli_fetch_array($result)){
-                      ?>
-                    <tr>                        
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm"><?php echo $data['alamat'] ?></h6>
-                        </div>      
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"><?php echo $data['jenis_kelamin'] ?></span>
-                      </td>
-                      <td>
-                        <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
-                        </div>      
-                      </td>
-                      <td class="align-middle">
-                      <a  data-bs-toggle="modal" data-bs-target="#exampleModal" href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                        Edit
-                      </a>&nbsp;
-                      <a onclick="funcdel(${posts.id})" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                          Delete
-                      </a>
-                      </td>
-                    </tr>
-                    <?php
-                    }?>
-                      
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <!-- <div class="posts-list">data</div> -->
         
         <!-- end body content -->
@@ -252,43 +198,12 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label" >Name</label>
-                <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
-              </div>
-              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!--   Core JS Files   -->
-    <script src="assets/js/core/popper.min.js"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/chartjs.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
     
     <script>
       
@@ -303,6 +218,6 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
+    <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
   </body>
 </html>
