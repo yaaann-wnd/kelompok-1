@@ -104,8 +104,8 @@ include 'config.php';
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Pilih Jenis Kelamin</label>
-                                                <select class="form-select" aria-label="Default select example" name="jenis_kelamin">
-                                                    <option disabled selected>-- Pilih Jenis Kelamin --</option>
+                                                <select class="form-select" required name="jenis_kelamin">
+                                                    <option disabled selected value="">-- Pilih Jenis Kelamin --</option>
                                                     <option value="L">Laki-laki</option>
                                                     <option value="P">Perempuan</option>
                                                     
