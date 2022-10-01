@@ -101,9 +101,7 @@ if (isset($_POST['submit'])) {
                                             <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
                                                 <option disabled selected>-- Pilih Jenis Kelamin --</option>
                                                 <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>
-                                                
-                                                ?>
+                                                <option value="P">Perempuan</option>                                               
                                             </select>
                                         </div>
                                         <div class="mb-3">

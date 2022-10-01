@@ -112,7 +112,7 @@ $result = mysqli_query($db, "SELECT * FROM kelas");
                         </td>
                         <td  class="text-center">
                           <a href="editkelas.php?id=<?= $data['id_kelas']?>" class="btn bg-gradient-primary">Edit</a>
-                          <a href="deletekelas.php?id=<?= $data['id_kelas']?>" class="btn btn-danger">Delete</a>
+                          <a href="deletekelas.php?id=<?= $data['id_kelas']?>" class="btn bg-gradient-danger">Delete</a>
                         </td>
                       </tr>
                     <?php
