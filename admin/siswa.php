@@ -79,12 +79,12 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">NIS</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jenis Kelamin</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alamat</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kelas</th>
-                                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">NIS</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Nama</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Jenis Kelamin</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Alamat</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Kelas</th>
+                                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder">Aksi</th>
                                             <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
                                         </tr>

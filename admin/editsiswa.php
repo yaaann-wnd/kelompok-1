@@ -77,49 +77,52 @@ include 'config.php';
                                 </div>
                                 <!-- start form -->
                                 <form action="editprosessiswa.php" method="post" enctype="multipart/form-data">
-                                <?php
+                                    <?php
                                     $id = $_GET['id'];
                                     $ambil = mysqli_query($db, "select * from siswa where nis='$id'");
                                     while ($data = mysqli_fetch_array($ambil)) {
 
                                     ?>
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">NIS</label>
-                                            <input type="text" class="form-control" readonly name="nis" value="<?= $data['nis']?>">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama" value="<?= $data['nama']?>">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <?php
-                                                    $ambil2 = mysqli_query($db, "select jenis_kelamin from siswa");
-                                                    while ($data2 = mysqli_fetch_array($ambil2)) {
-                                                        if ($data['jenis_kelamin'] == $data2['jenis_kelamin']) {
-                                                            echo "<option value=$data2[jenis_kelamin] selected> $data2[jenis_kelamin]</option>";
-                                                        } else {
-                                                            echo "<option value=$data2[jenis_kelamin]> $data2[jenis_kelamin]</option> ";
-                                                        }
+                                        <div class="input-1 w-50 mx-auto">
+                                            <div class="mb-3">
+                                                <label class="form-label">NIS</label>
+                                                <input type="text" class="form-control" readonly name="nis" value="<?= $data['nis'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nama</label>
+                                                <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
+                                                    <?php
+                                                    if ($data['jenis_kelamin'] == "P") {
+                                                        echo "<span><h6>Perempuan</h6></span>";
+                                                    } else {
+                                                        echo "<span><h6>Laki-laki</h6></span>";
                                                     }
-                                                ?>
-                                                <!-- <option value="L">L</option>
+                                                    ?>                                               
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Pilih Jenis Kelamin</label>
+                                                <select class="form-select" aria-label="Default select example" name="jenis_kelamin">
+                                                    <option disabled selected>-- Pilih Jenis Kelamin --</option>
+                                                    <option value="L">Laki-laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                    
+                                                    <!-- <option value="L">L</option>
                                                 <option value="P">P</option> -->
 
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" value="<?= $data['alamat']?>">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-                                            <select class="form-select" aria-label="Default select example" name="kelas">
-                                                <option disabled selected>-- Pilih Kelas --</option>
-                                                <?php
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Alamat</label>
+                                                <input type="text" class="form-control" name="alamat" value="<?= $data['alamat'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Kelas</label>
+                                                <select class="form-select" aria-label="Default select example" name="kelas">
+                                                    <option disabled selected>-- Pilih Kelas --</option>
+                                                    <?php
                                                     $ambil3 = mysqli_query($db, "select * from kelas");
                                                     while ($data3 = mysqli_fetch_array($ambil3)) {
                                                         if ($data['id_kelas'] == $data3['id_kelas']) {
@@ -129,12 +132,12 @@ include 'config.php';
                                                         }
                                                     }
                                                     ?>
-                                            </select>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
+                                        </div>
                                     <?php
                                     }
                                     ?>
