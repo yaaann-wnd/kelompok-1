@@ -1,25 +1,11 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.6
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <?php
+
 include 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
-$result = mysqli_query($db, "SELECT * FROM buku");
 
 ?>
 <!DOCTYPE html>
@@ -70,7 +56,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:localStorage.clear();window.location.href = '../logout.php';" class="nav-link text-danger font-weight-bold px-0">
+                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
@@ -89,94 +75,81 @@ $result = mysqli_query($db, "SELECT * FROM buku");
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
-                        <div class="card-header pb-0">
-                            <h6>Authors table</h6>
-                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead class="text-center">
-                                        <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Buku</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penulis</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tahun</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kota</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penerbit</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sinopsis</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
-                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
-                                        </tr>
-                                    </thead>
-                                    <tbody class="posts-list">
-                                        <?php
-                                        while ($data = mysqli_fetch_array($result)) {
-                                        ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?php echo $data['id_buku'] ?></h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['penulis'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['tahun'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['kota'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['penerbit'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['sinopsis'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Edit</a>
-                                                    <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-danger">Delete</a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                        } ?>
+                            <div class="form-wrapper">
+                                <div class="judul text-center my-4">
+                                    <h3>Edit Siswa</h3>
+                                </div>
+                                <!-- start form -->
+                                <form action="editprosessiswa.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                    $id = $_GET['id'];
+                                    $ambil = mysqli_query($db, "select * from siswa where nis='$id'");
+                                    while ($data = mysqli_fetch_array($ambil)) {
 
-                                    </tbody>
-                                </table>
+                                    ?>
+                                        <div class="input-1 w-50 mx-auto">
+                                            <div class="mb-3">
+                                                <label class="form-label">NIS</label>
+                                                <input type="text" class="form-control" readonly name="nis" value="<?= $data['nis'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nama</label>
+                                                <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
+                                                    <?php
+                                                    if ($data['jenis_kelamin'] == "P") {
+                                                        echo "<span><h6>Perempuan</h6></span>";
+                                                    } else {
+                                                        echo "<span><h6>Laki-laki</h6></span>";
+                                                    }
+                                                    ?>                                               
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Pilih Jenis Kelamin</label>
+                                                <select class="form-select" required name="jenis_kelamin">
+                                                    <option disabled selected value="">-- Pilih Jenis Kelamin --</option>
+                                                    <option value="L">Laki-laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                    
+                                                    <!-- <option value="L">L</option>
+                                                <option value="P">P</option> -->
+
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Alamat</label>
+                                                <input type="text" class="form-control" name="alamat" value="<?= $data['alamat'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Kelas</label>
+                                                <select class="form-select" aria-label="Default select example" name="kelas">
+                                                    <option disabled selected>-- Pilih Kelas --</option>
+                                                    <?php
+                                                    $ambil3 = mysqli_query($db, "select * from kelas");
+                                                    while ($data3 = mysqli_fetch_array($ambil3)) {
+                                                        if ($data['id_kelas'] == $data3['id_kelas']) {
+                                                            echo "<option value=$data3[id_kelas] selected> $data3[id_kelas] - $data3[nama_kelas]</option>";
+                                                        } else {
+                                                            echo "<option value=$data3[id_kelas]> $data3[id_kelas] - $data3[nama_kelas]</option> ";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+                                </form>
+                                <!-- end form -->
                             </div>
-                            <div class="text-center my-4">
-                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
-                            </div>
+                            <!-- <div class="table-responsive p-0"></div> -->
                         </div>
                     </div>
                 </div>
@@ -184,7 +157,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3">
+            <footer class="footer pt-3 my-4">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -286,8 +259,9 @@ $result = mysqli_query($db, "SELECT * FROM buku");
         </div>
     </div>
 
-    <!-- Modal -->    
+    <!-- Modal -->
     <!-- end Modal -->
+
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -311,4 +285,3 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 </body>
 
 </html>
-

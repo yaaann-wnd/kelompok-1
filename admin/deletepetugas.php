@@ -7,18 +7,14 @@ if (!isset($_SESSION['username'])) {
 }
 
 $id = $_GET['id'];
-$qdata = mysqli_query($db, "select cover from buku where id_buku = '$id'");
-$data = mysqli_fetch_array($qdata);
-$delete = mysqli_query($db, "delete from buku where id_buku='$id'");
-
-unlink("../bootstrap/img/" . $data['cover']);
+$delete = mysqli_query($db, "DELETE FROM petugas WHERE nip='$id'");
 
 if ($delete) { ?>
     <script>
         alert("Berhasil menghapus!");
-        document.location = "buku.php";
+        document.location = "petugas.php";
     </script>
-<?php
+<?php 
 } else {
     echo "Aduh, gagal menghapus";
 }
