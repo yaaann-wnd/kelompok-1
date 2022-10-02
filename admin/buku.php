@@ -21,6 +21,7 @@ if (!isset($_SESSION['username'])) {
 }
 $result = mysqli_query($db, "SELECT * FROM buku");
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +31,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -106,7 +107,14 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sinopsis</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <?php
+                                            if ($_SESSION['role']!='siswa') {
+                                                # code...
+                                                ?>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <?php
+                                            }
+                                            ?>
                                             <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
                                         </tr>
@@ -163,10 +171,18 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                                         <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
                                                     </div>
                                                 </td>
+                                                <?php
+                                                if ($_SESSION['role']!='siswa') {
+                                                    # code...
+                                                    ?>
                                                 <td class="align-middle">
                                                     <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Edit</a>
                                                     <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-danger">Delete</a>
                                                 </td>
+                                                <?php
+                                                }
+                                                ?>
+                                                
                                             </tr>
                                         <?php
                                         } ?>
@@ -174,9 +190,17 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                     </tbody>
                                 </table>
                             </div>
+                            <?php
+                            if ($_SESSION['role']!='siswa') {
+                                # code...
+                                ?>
+                            
                             <div class="text-center my-4">
                                 <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
-                            </div>
+                            </div><?php
+                            }
+                            ?>
+                            
                         </div>
                     </div>
                 </div>

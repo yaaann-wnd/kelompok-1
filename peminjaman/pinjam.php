@@ -21,7 +21,6 @@ $date7 = new DateTime('now');
 $tgl=$date->format('Y-m-d');
 $date7->modify('+7 day');
 $tgl7=$date7->format('Y-m-d') . "\n";
-$dataid = mysqli_query($db, "SELECT id_peminjaman FROM peminjaman ORDER BY id_peminjaman DESC limit 1");
 
 // echo $tgl;
 if (!isset($_SESSION['username'])) {
@@ -51,6 +50,7 @@ if (isset($_POST['submit'])) {
         $petugas = $_SESSION['username'];
         
         $sendd = mysqli_query($db, "INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES (NULL, '$nis', '$petugas', '$tgl', '$tgl7'); ");
+        $dataid = mysqli_query($db, "SELECT id_peminjaman FROM peminjaman ORDER BY id_peminjaman DESC limit 1");
         $id_peminjaman = '';
         if ($sendd) {
             # code...

@@ -19,7 +19,9 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
-$result = mysqli_query($db, "SELECT * FROM  buku join `detail_peminjaman` JOIN peminjaman on buku.id_buku=detail_peminjaman.id_buku and peminjaman.id_peminjaman;");
+$role = $_SESSION['username'];
+$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE siswa.nis='$role';");
+
 
 $date = new DateTime('now');
 $tgl=$date->format('Y-m-d');
@@ -32,7 +34,7 @@ $tgl=$date->format('Y-m-d');
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -59,9 +61,9 @@ $tgl=$date->format('Y-m-d');
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pengembalian</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <h6 class="font-weight-bolder mb-0">Pengembalian</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -104,7 +106,14 @@ $tgl=$date->format('Y-m-d');
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <?php
+                                            if ($_SESSION['role']!='siswa') {
+                                                # code...
+                                                ?>
+                                            
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th><?php
+                                            }
+                                            ?>
                                             <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
                                         </tr>
@@ -153,9 +162,18 @@ $tgl=$date->format('Y-m-d');
                                                         }else{echo "dipinjam";}  ?></h6>
                                                     </div>
                                                 </th>
+                                                <?php
+                                                if ($_SESSION['role']!='siswa') {
+                                                    # code...
+                                                    ?>
+                                                
+                                                
                                                 <th class="align-middle">
                                                     <a href="pinjam.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Kembali</a>
                                                 </th> 
+                                                <?php
+                                                }
+                                                ?>
                                             </tr> 
                                         <?php
                                         } ?>
