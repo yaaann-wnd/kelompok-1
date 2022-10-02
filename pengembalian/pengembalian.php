@@ -15,13 +15,11 @@
 <?php
 include '../config.php';
 $result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminjaman.tgl_pinjam, peminjaman.tgl_kembali FROM buku JOIN detail_peminjaman JOIN peminjaman JOIN petugas JOIN pengembalian JOIN siswa ON buku.id_buku=detail_peminjaman.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_petugas=petugas.nip AND peminjaman.id_peminjaman=pengembalian.id_pengembalian AND peminjaman.id_peminjaman=siswa.nis;");
-// while($tes = mysqli_fetch_array($result)){
-//   // echo $tes[1]['nama'];
-//   var_dump($tes[1]);
+session_start();
 
-// }
-// die();
-?>
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -67,7 +65,7 @@ $result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminj
             </div>
             <ul class="navbar-nav justify-content-end">
               <li class="nav-item d-flex align-items-center">
-                <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+              <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                   <i class="fa fa-user me-sm-1"></i>
                   <span class="d-sm-inline d-none">Logout</span>
                 </a>
