@@ -14,6 +14,11 @@
 -->
 <?php
 include 'config.php';
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}
 
 $id = $_GET['id'];
 $ambil = mysqli_query($db, "SELECT * FROM kelas WHERE id_kelas=$id");

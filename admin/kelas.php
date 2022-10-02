@@ -14,6 +14,11 @@
 -->
 <?php
 include 'config.php';
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}
 $result = mysqli_query($db, "SELECT * FROM kelas");
 
 ?>

@@ -1,5 +1,10 @@
 <?php
 include 'config.php';
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}
 
 $id = $_GET['id'];
 $delete = mysqli_query($db, "DELETE FROM petugas WHERE nip='$id'");

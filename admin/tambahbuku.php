@@ -1,6 +1,11 @@
 <?php
 
 include 'config.php';
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}
 
 if (isset($_POST['submit'])) {
     $id_buku = $_POST['id_buku'];
