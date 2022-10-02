@@ -10,7 +10,8 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($db,$sql);
     $data = mysqli_num_rows($result);
     if ($data==0) {
-        header('location:index.php?status=gaada');
+      echo "<script>alert('anda tidak memiliki akun')</script>";
+        header('location:index.php');
     }else{
         $sql = "SELECT *  FROM petugas  WHERE nip = '$username' AND password = '$password'";
         $result = mysqli_query($db,$sql);
@@ -22,6 +23,7 @@ if (isset($_POST['submit'])) {
             
             header('location:dashboard/dashboard.php');
         }else{
+          echo "<script>alert('Password salah')</script>";
             header('location:index.php?status=salah');
         }
     }
