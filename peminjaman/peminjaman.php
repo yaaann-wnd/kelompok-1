@@ -14,13 +14,8 @@
 -->
 <?php
 include '../config.php';
-$result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminjaman.tgl_pinjam, peminjaman.tgl_kembali FROM buku JOIN detail_peminjaman JOIN peminjaman JOIN petugas JOIN pengembalian JOIN siswa ON buku.id_buku=detail_peminjaman.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_petugas=petugas.nip AND peminjaman.id_peminjaman=pengembalian.id_pengembalian AND peminjaman.id_peminjaman=siswa.nis;");
-// while($tes = mysqli_fetch_array($result)){
-//   // echo $tes[1]['nama'];
-//   var_dump($tes[1]);
+$result = mysqli_query($db, "SELECT * FROM buku");
 
-// }
-// die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,11 +89,9 @@ $result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminj
                   <table class="table align-items-center mb-0">
                     <thead>
                       <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Siswa</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Petugas</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul Buku</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Peminjaman</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
                         <th class="text-secondary opacity-7"></th>
                       </tr>
                     </thead>
@@ -110,23 +103,17 @@ $result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminj
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $data[0]; ?></h6>
+                            <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
                           </div>
                         </div>
                       </td>
                       <td>
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm"><?php echo $data[1] ?></h6>
+                          <h6 class="mb-0 text-sm"><?php echo $data['alamat'] ?></h6>
                         </div>      
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="mb-0 text-sm"><?php echo $data[2] ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="mb-0 text-sm"><?php echo $data[3] ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="mb-0 text-sm"><?php echo $data[4] ?></span>
+                        <span class="badge badge-sm bg-gradient-success"><?php echo $data['jenis_kelamin'] ?></span>
                       </td>
                       <td class="align-middle">
                       <a href="edit.php?id=<?php echo $data['nip'] ?>"  href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
@@ -258,38 +245,6 @@ $result = mysqli_query($db, "SELECT  siswa.nama,petugas.nama,buku.judul,  peminj
       </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label" >Name</label>
-                <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
-              </div>
-              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

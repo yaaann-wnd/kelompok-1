@@ -131,7 +131,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../pinjam/pinjam.php">
+        <a class="nav-link" href="../peminjaman/peminjaman.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>credit-card</title>
@@ -150,11 +150,11 @@
               </g>
             </svg>
           </div>
-          <span class="nav-link-text ms-1">Terpinjam</span>
+          <span class="nav-link-text ms-1">Peminjaman</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../history/history.php">
+        <a class="nav-link" href="../pengembalian/pengembalian.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>credit-card</title>
@@ -173,7 +173,7 @@
               </g>
             </svg>
           </div>
-          <span class="nav-link-text ms-1">History</span>
+          <span class="nav-link-text ms-1">Pengembalian</span>
         </a>
       </li>
     </ul>
