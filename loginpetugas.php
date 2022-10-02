@@ -16,6 +16,7 @@ if (isset($_POST['submit'])) {
 
     if ($data) {
         $_SESSION['nip'] = $data['nip'];
+        $_SESSION['nama'] = $data['nama'];
         header('location:petugas/buku.php');
     } else { ?>
         <script>

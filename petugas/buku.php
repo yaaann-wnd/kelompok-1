@@ -60,6 +60,11 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <div class="nama-petugas mt-4">
+                        <?php
+                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>".$_SESSION['nama']."</span></h5>"; 
+                        ?>
+                    </div>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -90,7 +95,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header pb-0">
-                            <h6>Authors table</h6>
+                            <h6>Data Buku</h6>
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-0">
