@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
     }
 }
 if (isset($_SESSION['username'])) {
-    // header("Location: direction.php");
+    header("Location: dashboard/dashboard.php");
 }
 ?>
 <!DOCTYPE html>
