@@ -15,12 +15,57 @@
 <?php
 include '../config.php';
 session_start();
+$date = new DateTime('now');
+$date7 = new DateTime('now');
+// echo $date->format('Y-m-d');
+$tgl=$date->format('Y-m-d');
+$date7->modify('+7 day');
+$tgl7=$date7->format('Y-m-d') . "\n";
+$dataid = mysqli_query($db, "SELECT id_peminjaman FROM peminjaman ORDER BY id_peminjaman DESC limit 1");
 
+// echo $tgl;
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
-$result = mysqli_query($db, "SELECT * FROM buku");
+$kodebuku = $_GET['id'];
+$result = mysqli_query($db, "SELECT * FROM buku WHERE id_buku='$kodebuku'");
+while($data = mysqli_fetch_array($result)){
+    $judul = $data['judul'];
+    $penulis = $data['penulis'];
+}
+$result = mysqli_query($db, "SELECT * FROM siswa ");
 
+
+if (isset($_POST['submit'])) {
+    // echo "<script>alert('asd')</script>";
+    # code...
+    // $nis = $_POST['nis'];
+    // $total = $_POST['total'];
+    // echo $_POST['nis'];
+    
+    if ($_POST['nis']==null || $_POST['total']==null ){
+        echo "<script>alert('Tolong isi semua field')</script>";
+    }else{
+        $nis = $_POST['nis'];
+        $total = $_POST['total'];
+        $petugas = $_SESSION['username'];
+        
+        $sendd = mysqli_query($db, "INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES (NULL, '$nis', '$petugas', '$tgl', '$tgl7'); ");
+        $id_peminjaman = '';
+        if ($sendd) {
+            # code...
+            while($lastid = mysqli_fetch_array($dataid)){
+                $id_peminjaman = $lastid['id_peminjaman'];
+            }
+            echo $id_peminjaman;
+            if($sendd) {
+                $sendd2 = mysqli_query($db, "INSERT INTO `detail_peminjaman` (`id_detail_pinjam`, `id_buku`, `id_peminjaman`, `kuantitas`) VALUES (NULL, '$kodebuku', '$id_peminjaman', '$total');");
+                header('location:peminjaman.php');
+            }
+        }
+        
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,77 +132,52 @@ $result = mysqli_query($db, "SELECT * FROM buku");
         <!-- body content -->
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-header pb-0">
-                            <h6>Authors table</h6>
-                        </div>
-                        <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead class="text-center">
-                                        <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
-                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
-                                        </tr>
-                                    </thead>
-                                    <thead class="posts-list text-center">
-                                        <?php
-                                        $no=0;
-                                        while ($data = mysqli_fetch_array($result)) {
-                                        $no++;
-                                        ?>
-                                            <tr>
-                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
-                                            
-                                                -->
-                                                <th>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?php echo $no ?></h6>
-                                                        </div>
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
-                                                    </div>
-                                                </th>
-                                                <th class="align-middle">
-                                                    <a href="pinjam.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Pinjam</a>
-                                                </th> 
-                                            </tr> 
-                                        <?php
-                                        } ?>
-
-                                    </thead>
-                                </table>
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>Authors table</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                        <form role="form" method="post">
+                            <label>Kode Buku</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $kodebuku;?>" name="kodebuku" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
                             </div>
-                            <!-- <div class="text-center my-4">
-                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
-                            </div> -->
+                            <label>Judul</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $judul."--".$penulis;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>NIS</label>
+                            <select name="nis" class="form-select" aria-label="Default select example">
+                                <option selected></option>
+                                <?php 
+                                    while($data = mysqli_fetch_array($result)){
+                                     
+                                ?>
+                                <option value="<?php echo $data['nis'];?>"><?php echo $data['nis'].'.'.$data['nama'];?></option>
+                                <?php
+                                    }
+                                ?>
+                            </select>
+                            <label>Petugas</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $_SESSION['fullname'];?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Total</label>
+                            <div class="mb-3">
+                                <input type="number" name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            
+                            <div class="text-center">
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                            </div>
+                        </form>
                         </div>
                     </div>
                 </div>
+            </div>
+
             </div>
             <!-- <div class="posts-list">data</div> -->
 
