@@ -33,7 +33,7 @@ if (!isset($_SESSION['nip'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -47,7 +47,7 @@ if (!isset($_SESSION['nip'])) {
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
                     <div class="nama-petugas mt-4">
                         <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>".$_SESSION['nama']."</span></h5>"; 
+                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
                         ?>
                     </div>
                 </nav>
@@ -318,4 +318,3 @@ if (!isset($_SESSION['nip'])) {
 </body>
 
 </html>
-

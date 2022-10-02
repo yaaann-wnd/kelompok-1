@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
 
     if ($data) {
         $_SESSION['username'] = $data['username'];
-        header('location:admin/buku.php');
+        header('location:admin/dashboard.php');
     } else { ?>
         <script>
             alert("Username atau Password anda SALAH")

@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -66,11 +66,9 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-                    <div class="nama-petugas mt-4">
-                        <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>".$_SESSION['nama']."</span></h5>"; 
-                        ?>
-                    </div>
+                    <?php
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                    ?>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -109,7 +107,7 @@ if (isset($_POST['submit'])) {
                                 <form action="" method="post" enctype="multipart/form-data">
                                     <div class="row mb-3">
                                         <div class="col-6">
-                                            <div class="input-1 w-50 ms-auto">                                                
+                                            <div class="input-1 w-50 ms-auto">
                                                 <div class="mb-3">
                                                     <label class="form-label">Penulis</label>
                                                     <input type="text" class="form-control" name="penulis">

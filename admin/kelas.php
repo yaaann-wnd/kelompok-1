@@ -17,7 +17,7 @@ include 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
+  header('location:../index.php');
 }
 $result = mysqli_query($db, "SELECT * FROM kelas");
 
@@ -58,6 +58,9 @@ $result = mysqli_query($db, "SELECT * FROM kelas");
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+              <div class="nama-petugas">
+                <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
+              </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -68,12 +71,10 @@ $result = mysqli_query($db, "SELECT * FROM kelas");
           </div>
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+              <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
-            </li>
-
             </li>
           </ul>
         </div>
@@ -105,19 +106,19 @@ $result = mysqli_query($db, "SELECT * FROM kelas");
                     while ($data = mysqli_fetch_array($result)) {
                     ?>
                       <tr>
-                        <td>                          
-                            <div>
-                              <h6 class="mb-0 text-sm"><?php echo $data['id_kelas'] ?></h6>
-                            </div>                          
+                        <td>
+                          <div>
+                            <h6 class="mb-0 text-sm"><?php echo $data['id_kelas'] ?></h6>
+                          </div>
                         </td>
                         <td>
                           <div>
                             <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
                           </div>
                         </td>
-                        <td  class="text-center">
-                          <a href="editkelas.php?id=<?= $data['id_kelas']?>" class="btn bg-gradient-primary">Edit</a>
-                          <a href="deletekelas.php?id=<?= $data['id_kelas']?>" class="btn bg-gradient-danger">Delete</a>
+                        <td class="text-center">
+                          <a href="editkelas.php?id=<?= $data['id_kelas'] ?>" class="btn bg-gradient-primary">Edit</a>
+                          <a href="deletekelas.php?id=<?= $data['id_kelas'] ?>" class="btn bg-gradient-danger">Delete</a>
                         </td>
                       </tr>
                     <?php
@@ -127,7 +128,7 @@ $result = mysqli_query($db, "SELECT * FROM kelas");
                 </table>
               </div>
               <div class="text-center">
-              <a href="tambahkelas.php" class="btn bg-gradient-primary">Tambah Kelas</a>
+                <a href="tambahkelas.php" class="btn bg-gradient-primary">Tambah Kelas</a>
               </div>
             </div>
           </div>

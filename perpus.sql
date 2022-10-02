@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2022 at 10:15 AM
+-- Generation Time: Oct 02, 2022 at 01:56 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `perpus`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `username` varchar(55) NOT NULL,
+  `password` varchar(55) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`username`, `password`) VALUES
+('jihyo', 'admin');
 
 -- --------------------------------------------------------
 
@@ -44,8 +62,7 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `penulis`, `tahun`, `judul`, `kota`, `penerbit`, `cover`, `sinopsis`, `stok`) VALUES
-(1, 'Jihyo', 2019, 'Love Me', 'Malang', 'JYP', '1.jpg', 'Gak paham', 10),
-(2, 'Wendy', 2018, 'Stars', 'Malang', 'JYP', '2.jpg', 'idk', 5);
+(2, 'Nayeon', 2020, 'Moon', 'Daegu', 'SM', '2.jpg', 'Bruh', 4);
 
 -- --------------------------------------------------------
 
@@ -60,6 +77,13 @@ CREATE TABLE `detail_peminjaman` (
   `kuantitas` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `detail_peminjaman`
+--
+
+INSERT INTO `detail_peminjaman` (`id_detail_pinjam`, `id_buku`, `id_peminjaman`, `kuantitas`) VALUES
+(1, 2, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -72,6 +96,13 @@ CREATE TABLE `detail_pengembalian` (
   `ada` int(3) NOT NULL,
   `hilang` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `detail_pengembalian`
+--
+
+INSERT INTO `detail_pengembalian` (`id_detail_kembali`, `id_pengembalian`, `ada`, `hilang`) VALUES
+(1, 1, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -90,7 +121,8 @@ CREATE TABLE `kelas` (
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`) VALUES
 (1, 'Dance'),
-(2, 'Sing');
+(3, 'Computer science'),
+(4, 'Aerospace');
 
 -- --------------------------------------------------------
 
@@ -106,6 +138,13 @@ CREATE TABLE `peminjaman` (
   `tgl_kembali` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `peminjaman`
+--
+
+INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES
+(1, 6, 3, '2022-10-04', '2022-10-07');
+
 -- --------------------------------------------------------
 
 --
@@ -118,6 +157,13 @@ CREATE TABLE `pengembalian` (
   `tgl_pengembalian` date NOT NULL,
   `denda` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pengembalian`
+--
+
+INSERT INTO `pengembalian` (`id_pengembalian`, `id_peminjaman`, `tgl_pengembalian`, `denda`) VALUES
+(1, 1, '2022-10-07', 0);
 
 -- --------------------------------------------------------
 
@@ -132,6 +178,14 @@ CREATE TABLE `petugas` (
   `alamat` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `petugas`
+--
+
+INSERT INTO `petugas` (`nip`, `nama`, `jenis_kelamin`, `alamat`, `password`) VALUES
+(1, 'Mina', 'P', 'Sukabumi', '123456'),
+(3, 'Tzuyu', 'P', 'Incheon', '123');
 
 -- --------------------------------------------------------
 
@@ -153,7 +207,9 @@ CREATE TABLE `siswa` (
 
 INSERT INTO `siswa` (`nis`, `nama`, `jenis_kelamin`, `alamat`, `id_kelas`) VALUES
 (1, 'Joy', 'P', 'Malang', 1),
-(2, 'Irene', 'P', 'Malang', 2);
+(4, 'Chaeyoung', 'P', 'Lowokwaru', 3),
+(5, 'qweqweqeqe', 'L', 'qweqeqe', 1),
+(6, 'Wonyoung', 'P', 'Lowokwaru', 3);
 
 --
 -- Indexes for dumped tables
@@ -177,6 +233,7 @@ ALTER TABLE `detail_peminjaman`
 -- Indexes for table `detail_pengembalian`
 --
 ALTER TABLE `detail_pengembalian`
+  ADD PRIMARY KEY (`id_detail_kembali`),
   ADD KEY `fk_pengembalian` (`id_pengembalian`);
 
 --
@@ -221,43 +278,49 @@ ALTER TABLE `siswa`
 -- AUTO_INCREMENT for table `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `detail_peminjaman`
 --
 ALTER TABLE `detail_peminjaman`
-  MODIFY `id_detail_pinjam` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detail_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `detail_pengembalian`
+--
+ALTER TABLE `detail_pengembalian`
+  MODIFY `id_detail_kembali` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pengembalian`
 --
 ALTER TABLE `pengembalian`
-  MODIFY `id_pengembalian` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengembalian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `petugas`
 --
 ALTER TABLE `petugas`
-  MODIFY `nip` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nip` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `nis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `nis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

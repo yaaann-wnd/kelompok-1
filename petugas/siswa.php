@@ -1,4 +1,3 @@
-
 <?php
 include 'config.php';
 session_start();
@@ -35,7 +34,7 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -49,7 +48,7 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
                     <div class="nama-petugas mt-4">
                         <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>".$_SESSION['nama']."</span></h5>"; 
+                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
                         ?>
                     </div>
                 </nav>
@@ -130,14 +129,14 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
                                                     </div>
-                                                </td>                                                
+                                                </td>
                                                 <td class="text-center">
                                                     <a href="editsiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-primary">Edit</a>
                                                     <a href="deletesiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php
-                                        } 
+                                        }
                                         ?>
 
                                     </tbody>

@@ -16,8 +16,8 @@ if (isset($_POST['submit'])) {
 
     if ($data) {
         $_SESSION['nip'] = $data['nip'];
-        $_SESSION['nama'] = $data['nama'];
-        header('location:petugas/buku.php');
+        $_SESSION['nama_petugas'] = $data['nama_petugas'];
+        header('location:petugas/dashboard.php');
     } else { ?>
         <script>
             alert("NIP atau Password anda SALAH")

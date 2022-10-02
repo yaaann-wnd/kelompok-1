@@ -8,22 +8,16 @@ if (!isset($_SESSION['username'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $id_buku = $_POST['id_buku'];
-    $penulis = $_POST['penulis'];
-    $judul = $_POST['judul'];
-    $tahun = $_POST['tahun'];
-    $penerbit = $_POST['penerbit'];
-    $kota = $_POST['kota'];
-    $sinopsis = $_POST['sinopsis'];
-    $stok = $_POST['stok'];
-    $cover = $_FILES['cover']['name'];
-    $tmp_name = $_FILES['cover']['tmp_name'];
-    move_uploaded_file($tmp_name, "../bootstrap/img/" . $cover);
+    $nama = $_POST['nama'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $alamat = $_POST['alamat'];
+    $kelas = $_POST['kelas'];
 
-    $query = mysqli_query($db, "INSERT INTO buku(penulis, judul, tahun, penerbit, kota, sinopsis, stok, cover) values ('$penulis', '$judul', '$tahun', '$penerbit', '$kota', '$sinopsis', '$stok', '$cover')");
+
+    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
 
     if ($query) {
-        header("location:buku.php");
+        header("location:siswa.php");
     }
 }
 
@@ -99,55 +93,38 @@ if (isset($_POST['submit'])) {
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="form-wrapper">
                                 <div class="judul text-center my-4">
-                                    <h3>Tambah Buku</h3>
+                                    <h3>Tambah Peminjaman</h3>
                                 </div>
                                 <!-- start form -->
                                 <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <div class="input-1 w-50 ms-auto">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Penulis</label>
-                                                    <input type="text" class="form-control" name="penulis">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Judul</label>
-                                                    <input type="text" class="form-control" name="judul">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tahun</label>
-                                                    <input type="number" class="form-control" min="1900" max="2099" name="tahun">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Penerbit</label>
-                                                    <input type="text" class="form-control" name="penerbit">
-                                                </div>
-                                            </div>
+                                    <div class="input-1 w-50 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nama Siswa</label>
+                                            <select class="form-select" aria-label="Default select example" name="siswa">
+                                                <option disabled selected>-- Pilih Siswa --</option>
+                                                <?php
+                                                    $ambil = mysqli_query($db, "SELECT * FROM siswa");
+                                                    while ($data = mysqli_fetch_assoc($ambil)) {
+                                                        echo "<option value=$data[nis]>$data[nama]</option>";
+                                                    }
+                                                ?>
+                                            </select>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="input-2 w-50">
-                                                <div>
-                                                    <label class="form-label">Kota</label>
-                                                    <input type="text" class="form-control" name="kota">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Sinopsis</label>
-                                                    <textarea name="sinopsis" class="form-control" rows="3"></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Stok</label>
-                                                    <input type="number" class="form-control" name="stok">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Cover</label>
-                                                    <input type="file" class="form-control" name="cover">
-                                                </div>
-
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Admin/Petugas</label>
+                                            <input type="text" class="form-control text-uppercase text-danger" readonly name="petugas" value="<?= $_SESSION['username']?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tanggal pinjam</label>
+                                            <input type="date" class="form-control" name="tgl_pinjam">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tanggal kembali</label>
+                                            <input type="date" class="form-control" name="tgl_kembali">
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
+                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Lanjut</button>
                                     </div>
                                 </form>
                                 <!-- end form -->

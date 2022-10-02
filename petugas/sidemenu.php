@@ -51,22 +51,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="petugas.php">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-badge text-primary text-sm" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Petugas</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="kelas.php">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-ruler-pencil text-primary text-sm" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Kelas</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="peminjaman.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-book-bookmark text-primary text-sm" aria-hidden="true"></i>

@@ -17,7 +17,7 @@ include 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
+  header('location:../index.php');
 }
 $result = mysqli_query($db, "SELECT * FROM petugas");
 
@@ -58,6 +58,9 @@ $result = mysqli_query($db, "SELECT * FROM petugas");
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+              <div class="nama-petugas">
+                <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
+              </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -68,12 +71,10 @@ $result = mysqli_query($db, "SELECT * FROM petugas");
           </div>
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+              <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
-            </li>
-
             </li>
           </ul>
         </div>
@@ -115,7 +116,7 @@ $result = mysqli_query($db, "SELECT * FROM petugas");
                         </td>
                         <td>
                           <div>
-                            <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                            <h6 class="mb-0 text-sm"><?php echo $data['nama_petugas'] ?></h6>
                           </div>
                         </td>
                         <td>

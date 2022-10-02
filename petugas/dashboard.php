@@ -2,7 +2,7 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
   header('location:../index.php');
 }
 
@@ -43,7 +43,7 @@ $jumlahbuku = mysqli_fetch_array($buku);
 
 <body class="g-sidenav-show bg-gray-100">
   <!-- include sidemenu -->
-  <?php include '../sidemenu.php'; ?>
+  <?php include 'sidemenu.php'; ?>
   <!-- end include sidemenu -->
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
     <!-- Navbar -->
@@ -55,9 +55,6 @@ $jumlahbuku = mysqli_fetch_array($buku);
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-          <div class="nama-petugas">
-            <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
-          </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -154,7 +151,7 @@ $jumlahbuku = mysqli_fetch_array($buku);
                   <div class="numbers">
                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Current User</p>
                     <h6 class="font-weight-bolder mb-0 text-uppercase text-primary text-gradient">
-                      <?php echo $_SESSION['username']; ?>
+                      <?php echo $_SESSION['nama_petugas']; ?>
                       <!-- <span class="text-success text-sm font-weight-bolder">Test</span> -->
                     </h6>
                   </div>

@@ -60,6 +60,9 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <div class="nama-petugas">
+                        <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
+                    </div>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -70,12 +73,10 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
-                        </li>
-
                         </li>
                     </ul>
                 </div>
@@ -103,10 +104,10 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Jenis Kelamin</label>
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
+                                            <select class="form-select" aria-label="Default select example" name="jenis_kelamin">
                                                 <option disabled selected>-- Pilih Jenis Kelamin --</option>
                                                 <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
+                                                <option value="P">Perempuan</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -115,11 +116,11 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Kelas</label>
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
+                                            <select class="form-select" aria-label="Default select example" name="kelas">
                                                 <option disabled selected>-- Pilih Jurusan --</option>
                                                 <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
+                                                $ambil = mysqli_query($db, "select * from kelas");
+                                                while ($data = mysqli_fetch_array($ambil)) {
                                                     echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
                                                 }
                                                 ?>

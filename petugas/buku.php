@@ -48,7 +48,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -62,7 +62,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
                     <div class="nama-petugas mt-4">
                         <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>".$_SESSION['nama']."</span></h5>"; 
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
                         ?>
                     </div>
                 </nav>
@@ -99,7 +99,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
+                                <table class="table align-items-center text-center mb-0">
                                     <thead class="text-center">
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Buku</th>
@@ -122,10 +122,8 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                         ?>
                                             <tr>
                                                 <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?php echo $data['id_buku'] ?></h6>
-                                                        </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['id_buku'] ?></h6>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -291,7 +289,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
         </div>
     </div>
 
-    <!-- Modal -->    
+    <!-- Modal -->
     <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
@@ -316,4 +314,3 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 </body>
 
 </html>
-
