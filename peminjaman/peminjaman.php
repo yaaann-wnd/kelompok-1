@@ -1,25 +1,25 @@
-<?php
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.6
+=========================================================
 
-include 'config.php';
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<?php
+include '../config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
-
-if (isset($_POST['submit'])) {
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $alamat = $_POST['alamat'];
-    $kelas = $_POST['kelas'];
-
-
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
-
-    if ($query) {
-        header("location:siswa.php");
-    }
-}
+$result = mysqli_query($db, "SELECT * FROM buku");
 
 ?>
 <!DOCTYPE html>
@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Peminjaman</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -57,10 +57,9 @@ if (isset($_POST['submit'])) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Peminjaman</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <h6 class="font-weight-bolder mb-0">Peminjaman</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -71,16 +70,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -93,54 +89,72 @@ if (isset($_POST['submit'])) {
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
+                        <div class="card-header pb-0">
+                            <h6>Authors table</h6>
+                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="form-wrapper">
-                                <div class="judul text-center my-4">
-                                    <h3>Tambah Siswa</h3>
-                                </div>
-                                <!-- start form -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center mb-0">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
+                                        </tr>
+                                    </thead>
+                                    <thead class="posts-list text-center">
+                                        <?php
+                                        $no=0;
+                                        while ($data = mysqli_fetch_array($result)) {
+                                        $no++;
+                                        ?>
+                                            <tr>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            
+                                                -->
+                                                <th>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm"><?php echo $no ?></h6>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th class="align-middle">
+                                                    <a href="pinjam.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Pinjam</a>
+                                                </th> 
+                                            </tr> 
+                                        <?php
+                                        } ?>
 
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
-                                                <option disabled selected>-- Pilih Jurusan --</option>
-                                                <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                                    echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
-                                </form>
-                                <!-- end form -->
+                                    </thead>
+                                </table>
                             </div>
-                            <!-- <div class="table-responsive p-0"></div> -->
+                            <!-- <div class="text-center my-4">
+                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -148,7 +162,7 @@ if (isset($_POST['submit'])) {
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3 my-4">
+            <footer class="footer pt-3">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -250,9 +264,8 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal -->    
     <!-- end Modal -->
-
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -276,3 +289,4 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
+

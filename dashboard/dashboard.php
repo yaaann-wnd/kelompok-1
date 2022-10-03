@@ -1,42 +1,48 @@
+<?php
+include '../config.php';
+session_start();
 
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.6
-=========================================================
+if (!isset($_SESSION['username'])) {
+    header('location:../index.php');
+}
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
+$siswa = mysqli_query($db, "SELECT count(*) as total  FROM `siswa`");
+$kelas = mysqli_query($db, "SELECT count(*) as total  FROM kelas");
+$peminjaman = mysqli_query($db, "SELECT count(*) as total  FROM peminjaman");
+$petugas = mysqli_query($db, "SELECT count(*) as total  FROM petugas");
+$buku = mysqli_query($db, "SELECT count(*) as total  FROM buku");
 
-=========================================================
+$jumlahsiswa=mysqli_fetch_array($siswa);
+$jumlahkelas=mysqli_fetch_array($kelas);
+$jumlahpeminjaman=mysqli_fetch_array($peminjaman);
+$jumlahpetugas=mysqli_fetch_array($petugas);
+$jumlahbuku=mysqli_fetch_array($buku);
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
     <title>Perpustakaan Web App</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
-    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" href="assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
+    <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
 
   </head>
 
   <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include 'sidemenu.php';?>
+    <?php include '../sidemenu.php';?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
       <!-- Navbar -->
@@ -58,7 +64,7 @@
             </div>
             <ul class="navbar-nav justify-content-end">
               <li class="nav-item d-flex align-items-center">
-                <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+                <a href="../logout.php" class="nav-link text-body font-weight-bold px-0">
                   <i class="fa fa-user me-sm-1"></i>
                   <span class="d-sm-inline d-none">Logout</span>
                 </a>
@@ -80,10 +86,9 @@
                 <div class="row">
                   <div class="col-8">
                     <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Temperature</p>
+                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Total SIswa</p>
                       <h5 class="font-weight-bolder mb-0">
-                        33 C
-                        <span class="text-success text-sm font-weight-bolder">+55 C</span>
+                        <?php echo $jumlahsiswa['total']  ; ?>
                       </h5>
                     </div>
                   </div>
@@ -102,10 +107,9 @@
                 <div class="row">
                   <div class="col-8">
                     <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Humidity</p>
+                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Buku</p>
                       <h5 class="font-weight-bolder mb-0">
-                        2,3%
-                        <span class="text-success text-sm font-weight-bolder">+3%</span>
+                        <?php echo $jumlahbuku['total']  ; ?>
                       </h5>
                     </div>
                   </div>
@@ -113,7 +117,6 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -125,10 +128,9 @@
                 <div class="row">
                   <div class="col-8">
                     <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Status</p>
+                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Peminjaman</p>
                       <h5 class="font-weight-bolder mb-0">
-                        On
-                        <span class="text-danger text-sm font-weight-bolder">Off</span>
+                        <?php echo $jumlahpeminjaman['total']  ; ?>
                       </h5>
                     </div>
                   </div>
@@ -148,17 +150,16 @@
                   <div class="col-8">
                     <div class="numbers">
                       <p class="text-sm mb-0 text-capitalize font-weight-bold">Current User</p>
-                      <h5 class="font-weight-bolder mb-0">
-                        Ilyas
-                        <span class="text-success text-sm font-weight-bolder">Test</span>
-                      </h5>
+                      <h6 class="font-weight-bolder mb-0">
+                        <?php echo $_SESSION['fullname']; ?>
+                        <!-- <span class="text-success text-sm font-weight-bolder">Test</span> -->
+                      </h6>
                     </div>
                   </div>
                   <div class="col-4 text-end">
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -167,16 +168,16 @@
         </div>
         
         <div class="row" style="margin-top: 50px;">
-          <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
               <div class="card-body p-3">
                 <div class="row">
                   <div class="col-8">
                     <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Temperature</p>
+                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Jumlah Petugas</p>
                       <h5 class="font-weight-bolder mb-0">
-                        33 C
-                        <span class="text-success text-sm font-weight-bolder">+55 C</span>
+                        
+                        <?php echo $jumlahpetugas['total']  ; ?>
                       </h5>
                     </div>
                   </div>
@@ -184,76 +185,26 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
                     </div>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
               <div class="card-body p-3">
                 <div class="row">
                   <div class="col-8">
                     <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Humidity</p>
+                      <p class="text-sm mb-0 text-capitalize font-weight-bold">kelas</p>
                       <h5 class="font-weight-bolder mb-0">
-                        2,3%
-                        <span class="text-success text-sm font-weight-bolder">+3%</span>
-                      </h5>
+                      <?php echo $jumlahkelas['total']  ; ?>                      </h5>
                     </div>
                   </div>
                   <div class="col-4 text-end">
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
                     </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-              <div class="card-body p-3">
-                <div class="row">
-                  <div class="col-8">
-                    <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Status</p>
-                      <h5 class="font-weight-bolder mb-0">
-                        On
-                        <span class="text-danger text-sm font-weight-bolder">Off</span>
-                      </h5>
-                    </div>
-                  </div>
-                  <div class="col-4 text-end">
-                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                      <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6">
-            <div class="card">
-              <div class="card-body p-3">
-                <div class="row">
-                  <div class="col-8">
-                    <div class="numbers">
-                      <p class="text-sm mb-0 text-capitalize font-weight-bold">Current User</p>
-                      <h5 class="font-weight-bolder mb-0">
-                        Ilyas
-                        <span class="text-success text-sm font-weight-bolder">Test</span>
-                      </h5>
-                    </div>
-                  </div>
-                  <div class="col-4 text-end">
-                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                      <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -369,11 +320,11 @@
       </div>
     </div>
     <!--   Core JS Files   -->
-    <script src="assets/js/core/popper.min.js"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/chartjs.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script>
       var ctx = document.getElementById("chart-bars").getContext("2d");
 
@@ -539,7 +490,6 @@
                   style: "normal",
                   lineHeight: 2,
                 },
-
               },
             },
           },
@@ -558,6 +508,6 @@
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
+    <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
   </body>
 </html>

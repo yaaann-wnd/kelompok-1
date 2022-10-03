@@ -13,29 +13,18 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <?php
-include 'config.php';
-session_start();
+include '../config.php';
+$result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=kelas.id_kelas");
 
-if (!isset($_SESSION['username'])) {
-
-    header('location:../index.php');
-
-}
-
-$id = $_GET['id'];
-$ambil = mysqli_query($db, "SELECT * FROM kelas WHERE id_kelas=$id");
-
-while ($data = mysqli_fetch_array($ambil)) { ?>
-
-  <!DOCTYPE html>
-  <html lang="en">
-
+?>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Perpustakaan Web App</title>
+    <title>Ersa Web App</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -51,7 +40,7 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
 
   <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include '../sidemenu.php';?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
       <!-- Navbar -->
@@ -63,7 +52,6 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
               <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
             </ol>
             <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
           </nav>
           <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -74,16 +62,13 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
             </div>
             <ul class="navbar-nav justify-content-end">
               <li class="nav-item d-flex align-items-center">
-
-              <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
                   <i class="fa fa-user me-sm-1"></i>
                   <span class="d-sm-inline d-none">Logout</span>
                 </a>
               </li>
-
+          
               </li>
-
             </ul>
           </div>
         </div>
@@ -93,59 +78,104 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
 
       <!-- body content -->
       <div class="container-fluid py-4">
-
-        <!-- <div class="posts-list">data</div> -->
-        <div class="card w-50 p-4">
-          <form action="editkelasproses.php" method="post">
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">ID Kelas</label>
-              <input type="text" name="id_kelas" readonly class="form-control" value="<?php echo $data['id_kelas'] ?>">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Nama Kelas</label>
-              <input type="text" name="nama" required class="form-control" value="<?php echo $data['nama_kelas'] ?>">
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary">Edit kelas</button>
-          </form>
-        </div>
-      <?php
-    }
-      ?>
-
-      <!-- end body content -->
-      <footer class="footer pt-3">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                ©
-                <script>
-                  document.write(new Date().getFullYear());
-                </script>
-                , made with <i class="fa fa-heart"></i> by
-                <a href="https://www.promaydo.net" class="font-weight-bold" target="_blank">Promaydo Technology</a>
-                for a better web.
+        <div class="row">
+          <div class="col-12">
+            <div class="card mb-4">
+              <div class="card-header pb-0">
+                <h6>Authors table</h6>
               </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
-              </ul>
+              <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kelas</th>
+                        <th class="text-secondary opacity-7"></th>
+                      </tr>
+                    </thead>
+                    <tbody class="posts-list">
+                      <?php 
+                      while($data = mysqli_fetch_array($result)){
+                      ?>
+                    <tr>                        
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm"><?php echo $data['alamat'] ?></h6>
+                        </div>      
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success"><?php echo $data['jenis_kelamin'] ?></span>
+                      </td>
+                      <td>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
+                        </div>      
+                      </td>
+                      <td class="align-middle">
+                      <a  data-bs-toggle="modal" data-bs-target="#exampleModal" href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        Edit
+                      </a>&nbsp;
+                      <a onclick="funcdel(${posts.id})" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Delete
+                      </a>
+                      </td>
+                    </tr>
+                    <?php
+                    }?>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </footer>
+        <!-- <div class="posts-list">data</div> -->
+        
+        <!-- end body content -->
+        <footer class="footer pt-3">
+          <div class="container-fluid">
+            <div class="row align-items-center justify-content-lg-between">
+              <div class="col-lg-6 mb-lg-0 mb-4">
+                <div class="copyright text-center text-sm text-muted text-lg-start">
+                  ©
+                  <script>
+                    document.write(new Date().getFullYear());
+                  </script>
+                  , made with <i class="fa fa-heart"></i> by
+                  <a href="https://www.promaydo.net" class="font-weight-bold" target="_blank">Promaydo Technology</a>
+                  for a better web.
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                  <li class="nav-item">
+                    <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </main>
     <div class="fixed-plugin">
@@ -202,9 +232,15 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
           <a class="btn bg-gradient-dark w-100" href="https://www.creative-tim.com/product/soft-ui-dashboard">Free Download</a>
           <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/license/soft-ui-dashboard">View documentation</a>
           <div class="w-100 text-center">
-            <a class="github-button" href="https://github.com/creativetimofficial/soft-ui-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub">Star</a>
+            <a class="github-button" href="https://github.com/creativetimofficial/soft-ui-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub"
+              >Star</a
+            >
             <h6 class="mt-3">Thank you for sharing!</h6>
-            <a href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
+            <a
+              href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard"
+              class="btn btn-dark mb-0 me-2"
+              target="_blank"
+            >
               <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
             </a>
             <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
@@ -216,14 +252,46 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label" >Name</label>
+                <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
+              </div>
+              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
-
+    
     <script>
+      
       var win = navigator.platform.indexOf("Win") > -1;
       if (win && document.querySelector("#sidenav-scrollbar")) {
         var options = {
@@ -237,5 +305,4 @@ while ($data = mysqli_fetch_array($ambil)) { ?>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
   </body>
-
-  </html>
+</html>

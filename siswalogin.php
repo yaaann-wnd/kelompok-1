@@ -2,33 +2,26 @@
 include 'config.php';
 session_start();
 if (isset($_GET['status'])) {
-  # code...
   $status = $_GET['status'];
+  # code...
 }
 if (isset($_POST['submit'])) {
     # code...
     $username = $_POST['username'];
-    $password = $_POST['password'];
-    $sql = "SELECT *  FROM petugas WHERE nip = '$username'";
+    $sql = "SELECT *  FROM siswa WHERE nis = '$username'";
     $result = mysqli_query($db,$sql);
     $data = mysqli_num_rows($result);
     if ($data==0) {
-      // echo "<script>alert('anda tidak memiliki akun')</script>";
-        header('location:index.php?status=salah');
+      // echo "Ga";
+        // header('location:index.php?status=gaada');
     }else{
-        $sql = "SELECT *  FROM petugas  WHERE nip = '$username' AND password = '$password'";
-        $result = mysqli_query($db,$sql);
-        $data = mysqli_fetch_assoc($result);
-        if ($data) {
-          $_SESSION['username'] = $data['nip'];
+      $data = mysqli_fetch_array($result);
+          $_SESSION['username'] = $data['nis'];
           $_SESSION['fullname'] = $data['nama'];
-          $_SESSION['role'] = $data['role'];  
-            
-            header('location:dashboard/dashboard.php');
-        }else{
-          echo "<script>alert('Password salah')</script>";
-            header('location:index.php?status=salah');
-        }
+          $_SESSION['role'] = 'siswa';  
+          // echo $_SESSION['username'];
+          // header('location:dashboard/dashboard.php');
+        
     }
 }
 if (isset($_SESSION['username'])) {
@@ -73,13 +66,9 @@ if (isset($_SESSION['username'])) {
                 </div>
                 <div class="card-body">
                   <form role="form" method="post">
-                    <label>NIP</label>
-                    <div class="mb-3">
-                      <input type="text" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
-                    </div>
-                    <label>Password</label>
-                    <div class="mb-3">
-                      <input type="text" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                    <label>NIS</label>
+                    <div class="mb-3 mt-5 mb-5">
+                      <input type="text" name="username" class="form-control" placeholder="NIS" aria-label="Email" aria-describedby="email-addon">
                     </div>
                     <!-- <div class="form-check form-switch" >
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
@@ -88,18 +77,6 @@ if (isset($_SESSION['username'])) {
                     <div class="text-center">
                       <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
                     </div>
-                    
-                    <label class="mt-2">Login sebagai siswa klik <a href="siswalogin.php"> disini</a></label>
-                    <?php
-                      if (isset($_GET['status'])) {
-                        # code...
-                        ?>
-                        <div class="alert alert-danger " role="alert">
-                          Userame atau Password Salah!
-                        </div>
-                        <?php
-                      }
-                    ?>
                   </form>
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1 mt-5 mb-4">
@@ -194,7 +171,6 @@ if (isset($_SESSION['username'])) {
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
-
 </body>
 
 </html>

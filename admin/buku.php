@@ -15,11 +15,11 @@
 <?php
 include 'config.php';
 session_start();
-
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
 $result = mysqli_query($db, "SELECT * FROM buku");
+
 
 ?>
 <!DOCTYPE html>
@@ -30,7 +30,9 @@ $result = mysqli_query($db, "SELECT * FROM buku");
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+
+    <title>Perpustakaan</title>
+
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -57,12 +59,11 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Buku</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-                    <div class="nama-petugas">
-                        <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
-                    </div>
+                    <h6 class="font-weight-bolder mb-0">Buku</h6>
+
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -78,6 +79,10 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
+
+
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -107,7 +112,14 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sinopsis</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <?php
+                                            if ($_SESSION['role']!='siswa') {
+                                                # code...
+                                                ?>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <?php
+                                            }
+                                            ?>
                                             <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
                                         </tr>
@@ -164,10 +176,18 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                                         <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
                                                     </div>
                                                 </td>
+                                                <?php
+                                                if ($_SESSION['role']!='siswa') {
+                                                    # code...
+                                                    ?>
                                                 <td class="align-middle">
                                                     <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Edit</a>
                                                     <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-danger">Delete</a>
                                                 </td>
+                                                <?php
+                                                }
+                                                ?>
+                                                
                                             </tr>
                                         <?php
                                         } ?>
@@ -175,9 +195,17 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                     </tbody>
                                 </table>
                             </div>
+                            <?php
+                            if ($_SESSION['role']!='siswa') {
+                                # code...
+                                ?>
+                            
                             <div class="text-center my-4">
                                 <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
-                            </div>
+                            </div><?php
+                            }
+                            ?>
+                            
                         </div>
                     </div>
                 </div>
@@ -287,7 +315,6 @@ $result = mysqli_query($db, "SELECT * FROM buku");
         </div>
     </div>
 
-    <!-- Modal -->
     <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
@@ -312,3 +339,4 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 </body>
 
 </html>
+

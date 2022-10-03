@@ -1,7 +1,9 @@
+
+
 <?php
 include 'config.php';
 session_start();
-
+// $_SESSION['username']="ilyas";
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
@@ -16,7 +18,8 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -46,9 +49,11 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+
                     <div class="nama-petugas">
                         <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
                     </div>
+
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -59,11 +64,17 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
+
+                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
+
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
+
+
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -125,14 +136,18 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm"><?php echo $data['nama_kelas'] ?></h6>
                                                     </div>
-                                                </td>
+
+                                                </td>                                                
+
                                                 <td class="text-center">
                                                     <a href="editsiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-primary">Edit</a>
                                                     <a href="deletesiswa.php?id=<?php echo $data['nis']; ?>" class="btn bg-gradient-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php
-                                        }
+
+                                        } 
+
                                         ?>
 
                                     </tbody>
@@ -305,3 +320,107 @@ $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=ke
 </body>
 
 </html>
+
+
+<!-- <?php
+
+        include 'config.php';
+
+        ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" href="#">Peminjaman</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                </ul>
+                <div class="ms-4">
+                    <a href="logout.php" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="buku-outer container mt-4">
+        <div class="card">
+            <div class="text-white card-header bg-success bg-opacity-75">
+                <h4>Data Buku</h4>
+            </div>
+            <div class="card-body">
+                <div class="tabel">
+                    <table class="table table-bordered text-center">
+                        <thead class="bg-success text-white bg-opacity-75 text-center">
+                            <tr>
+                                <th scope="col">ID Buku</th>
+                                <th scope="col">Penulis</th>
+                                <th scope="col">Tahun</th>
+                                <th scope="col">Judul</th>
+                                <th scope="col">Penerbit</th>
+                                <th scope="col">Kota</th>
+                                <th scope="col">Cover</th>
+                                <th scope="col">Sinopsis</th>
+                                <th scope="col">Stok</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $ambil = mysqli_query($db, "select * from buku");
+                            while ($data = mysqli_fetch_array($ambil)) { ?>
+                            <tr>
+                                <td><?= $data['id_buku'] ?></td>
+                                <td><?= $data['penulis'] ?></td>
+                                <td><?= $data['tahun'] ?></td>
+                                <td><?= $data['judul'] ?></td>
+                                <td><?= $data['penerbit'] ?></td>
+                                <td><?= $data['kota'] ?></td>
+                                <td><img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="75px" alt=""></td>
+                                <td><?= $data['sinopsis'] ?></td>
+                                <td><?= $data['stok'] ?></td>
+                                <td class="text-center">
+                                    <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-primary">Edit</a>
+                                    <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn btn-danger">Hapus</a>
+                                </td>
+                            </tr>
+                            
+                            <?php
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html> -->
+

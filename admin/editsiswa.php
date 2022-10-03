@@ -46,9 +46,7 @@ if (!isset($_SESSION['username'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-                    <div class="nama-petugas">
-                        <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
-                    </div>
+
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -64,6 +62,9 @@ if (!isset($_SESSION['username'])) {
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
+
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -99,14 +100,15 @@ if (!isset($_SESSION['username'])) {
                                                 <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
-                                                <?php
-                                                if ($data['jenis_kelamin'] == "P") {
-                                                    echo "<span><h6>Perempuan</h6></span>";
-                                                } else {
-                                                    echo "<span><h6>Laki-laki</h6></span>";
-                                                }
-                                                ?>
+
+                                                    <?php
+                                                    if ($data['jenis_kelamin'] == "P") {
+                                                        echo "<span><h6>Perempuan</h6></span>";
+                                                    } else {
+                                                        echo "<span><h6>Laki-laki</h6></span>";
+                                                    }
+                                                    ?>                                               
+
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Pilih Jenis Kelamin</label>

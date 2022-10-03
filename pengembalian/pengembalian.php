@@ -1,11 +1,35 @@
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.6
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
 <?php
-include 'config.php';
+include '../config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
+$nis = $_SESSION['username'];
+$role = $_SESSION['role'];
+if ($role != 'siswa') {
+    # code...
+    $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis");
+}else{
+    $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE siswa.nis='$nis';");
+}
 
+$date = new DateTime('now');
+$tgl=$date->format('Y-m-d');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +39,7 @@ if (!isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -42,10 +66,9 @@ if (!isset($_SESSION['username'])) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pengembalian</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <h6 class="font-weight-bolder mb-0">Pengembalian</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -56,15 +79,13 @@ if (!isset($_SESSION['username'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-                             <i class="fa fa-user me-sm-1"></i>
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -77,81 +98,136 @@ if (!isset($_SESSION['username'])) {
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
+                        <div class="card-header pb-0">
+                            <h6>Authors table</h6>
+                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="form-wrapper">
-                                <div class="judul text-center my-4">
-                                    <h3>Edit Buku</h3>
-                                </div>
-                                <form action="editbukuproses.php" method="post" enctype="multipart/form-data">
-                                    <?php
-                                    $id = $_GET['id'];
-                                    $ambil = mysqli_query($db, "select * from buku where id_buku='$id'");
-                                    while ($data = mysqli_fetch_array($ambil)) {
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center mb-0">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Siswa</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Detail</th> -->
+                                            <?php
+                                            if ($_SESSION['role']!='siswa') {
+                                                # code...
+                                                ?>
+                                            
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th><?php
+                                            }
+                                            ?>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
+                                        </tr>
+                                    </thead>
+                                    <thead class="posts-list text-center">
+                                        <?php
+                                        $no=0;
+                                        while ($data = mysqli_fetch_array($result)) {
+                                        $no++;
+                                        ?>
+                                            <tr>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            
+                                                -->
+                                                <th>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm"><?php echo $no ?></h6>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php 
+                                                        $num =$data['id_peminjaman'];
+                                                        
+                                                        $sql = "SELECT *  FROM pengembalian WHERE id_peminjaman = '$num'";
+                                                        $hitung = mysqli_query($db,$sql);
+                                                        $numro = mysqli_num_rows($hitung);
+                                                        if($numro == 0){
+                                                        if ($tgl>$data['tgl_kembali']) {
+                                                            # code...
+                                                            echo "telat";
+                                                        }else{
+                                                            echo "dipinjam";
+                                                        }  
+                                                        }else{
+                                                            echo "dikembalikan";
+                                                        }
+                                                    ?></h6>
+                                                    </div>
+                                                </th>
+                                                <!-- <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">
+                                                        <a href="detail.php?id=<?php// echo $data['id_detail_pinjam']?>"><button type="button" class="btn btn-primary">Primary</button>
+                                                    </a></h6>
+                                                    </div>
+                                                </th> -->
+                                                <?php
+                                                if ($_SESSION['role']!='siswa') {
+                                                    # code...
+                                                    if ($numro==0) {
+                                                        # code...
+                                                    
+                                                    ?>
+                                                
+                                                
+                                                <th class="align-middle">
+                                                    <a href="kembali.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Kembali</a>
+                                                </th> 
+                                                <?php
+                                                }else{
+                                                    ?>
+                                                    <th class="align-middle">
+                                                    <a href="detail.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-secondary">Detail</a>
+                                                </th> <?php
+                                                }
+                                                }
+                                                ?>
+                                                
+                                                
+                                            </tr> 
+                                        <?php
+                                        } ?>
 
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <div class="input-1 w-50 ms-auto">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="idm">ID Buku</label>
-                                                        <input type="text" id="idm" class="form-control" readonly name="id_buku" value="<?php echo $data['id_buku']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Penulis</label>
-                                                        <input type="text" class="form-control" name="penulis" value="<?php echo $data['penulis']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Judul</label>
-                                                        <input type="text" class="form-control" name="judul" value="<?php echo $data['judul']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Tahun</label>
-                                                        <input type="number" class="form-control" min="1900" max="2099" name="tahun" value="<?php echo $data['tahun']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Penerbit</label>
-                                                        <input type="text" class="form-control" name="penerbit" value="<?php echo $data['penerbit']; ?>">
-                                                    </div>
-                                                    <div>
-                                                        <label class="form-label">Kota</label>
-                                                        <input type="text" class="form-control" name="kota" value="<?php echo $data['kota']; ?>">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="input-2 w-50">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Sinopsis</label>
-                                                        <textarea name="sinopsis" class="form-control" rows="3"><?php echo $data['sinopsis']; ?></textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Stok</label>
-                                                        <input type="number" class="form-control" name="stok" value="<?php echo $data['stok']; ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Cover</label>
-                                                        <input type="file" class="form-control" name="cover">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label d-block">Cover sebelumnya : </label>
-                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="70px" alt="">
-                                                        <?php
-                                                        if ($data['cover'] == "") { ?>
-                                                            <img src="https://via.placeholder.com/500x500.png?text=PAS+FOTO+SISWA" width="70px" class="rounded">
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
-                                        </div>
-                                    <?php
-                                    }
-                                    ?>
-                                </form>
+
+                                    </thead>
+                                </table>
                             </div>
-                            <!-- <div class="table-responsive p-0"></div> -->
+                            <!-- <div class="text-center my-4">
+                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -261,38 +337,9 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Name</label>
-                            <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
-                        </div>
-                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modal -->    
+    
+    <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -301,6 +348,11 @@ if (!isset($_SESSION['username'])) {
     <script src="../assets/js/plugins/chartjs.min.js"></script>
 
     <script>
+        function modalfunc(a) {
+            console.log(a);
+            var var_example = a;
+            
+        }
         var win = navigator.platform.indexOf("Win") > -1;
         if (win && document.querySelector("#sidenav-scrollbar")) {
             var options = {
