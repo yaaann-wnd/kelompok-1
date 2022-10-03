@@ -109,8 +109,10 @@ $tgl=$date->format('Y-m-d');
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Siswa</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Detail</th> -->
                                             <?php
                                             if ($_SESSION['role']!='siswa') {
                                                 # code...
@@ -156,6 +158,11 @@ $tgl=$date->format('Y-m-d');
                                                 </th>
                                                 <th>
                                                     <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
                                                     </div>
                                                 </th>
@@ -180,6 +187,13 @@ $tgl=$date->format('Y-m-d');
                                                     ?></h6>
                                                     </div>
                                                 </th>
+                                                <!-- <th>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">
+                                                        <a href="detail.php?id=<?php// echo $data['id_detail_pinjam']?>"><button type="button" class="btn btn-primary">Primary</button>
+                                                    </a></h6>
+                                                    </div>
+                                                </th> -->
                                                 <?php
                                                 if ($_SESSION['role']!='siswa') {
                                                     # code...
@@ -193,12 +207,20 @@ $tgl=$date->format('Y-m-d');
                                                     <a href="kembali.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Kembali</a>
                                                 </th> 
                                                 <?php
+                                                }else{
+                                                    ?>
+                                                    <th class="align-middle">
+                                                    <a href="detail.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-secondary">Detail</a>
+                                                </th> <?php
                                                 }
                                                 }
                                                 ?>
+                                                
+                                                
                                             </tr> 
                                         <?php
                                         } ?>
+
 
                                     </thead>
                                 </table>
@@ -316,6 +338,7 @@ $tgl=$date->format('Y-m-d');
     </div>
 
     <!-- Modal -->    
+    
     <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
@@ -325,6 +348,11 @@ $tgl=$date->format('Y-m-d');
     <script src="../assets/js/plugins/chartjs.min.js"></script>
 
     <script>
+        function modalfunc(a) {
+            console.log(a);
+            var var_example = a;
+            
+        }
         var win = navigator.platform.indexOf("Win") > -1;
         if (win && document.querySelector("#sidenav-scrollbar")) {
             var options = {

@@ -31,6 +31,7 @@ $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN pemi
 while($data = mysqli_fetch_array($result)){
     $kodepinjam=$data['id_peminjaman'];
     $judul = $data['judul'];
+    $cover = $data['cover'];
     $penulis = $data['penulis'];
     $namasiswa = $data['nama'];
     $tglpinjam = $data['tgl_pinjam'];
@@ -59,6 +60,7 @@ if (isset($_POST['submit'])) {
         $denda = $_POST['denda'];
         $tanggal = $_POST['tanggal'];
         $kodepinjam2 = $_POST['kodepinjam2'];
+        // $cover = $_POST['cover'];
         
         // tambahstock
         $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'") ;
@@ -154,8 +156,10 @@ if (isset($_POST['submit'])) {
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>Authors table</h6>
+                        <h6>Details</h6>
+                        <img src="../bootstrap/img/<?= $cover ?>" class="rounded-4" width="75px" alt="">
                     </div>
+                    <!-- s -->
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="container">
                         <form role="form" method="post">
@@ -191,7 +195,7 @@ if (isset($_POST['submit'])) {
                             <div class="mb-3">
                                 <input readonly value="<?php echo $tgl ?>" name="tanggal" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
                             </div>
-                            <label>Ada</label>
+                            <!-- <label>Ada</label>
                             <div class="mb-3">
                                 <input name="ada" class="form-control" placeholder="Ada" aria-label="Email" aria-describedby="email-addon">
                             </div>
@@ -206,7 +210,7 @@ if (isset($_POST['submit'])) {
                             
                             <div class="text-center">
                             <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
-                            </div>
+                            </div> -->
                         </form>
                         </div>
                     </div>

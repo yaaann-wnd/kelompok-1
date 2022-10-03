@@ -1,7 +1,10 @@
 <?php
 include 'config.php';
 session_start();
-$status = $_GET['status'];
+if (isset($_GET['status'])) {
+  # code...
+  $status = $_GET['status'];
+}
 if (isset($_POST['submit'])) {
     # code...
     $username = $_POST['username'];
@@ -10,8 +13,8 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($db,$sql);
     $data = mysqli_num_rows($result);
     if ($data==0) {
-      echo "<script>alert('anda tidak memiliki akun')</script>";
-        header('location:index.php');
+      // echo "<script>alert('anda tidak memiliki akun')</script>";
+        header('location:index.php?status=salah');
     }else{
         $sql = "SELECT *  FROM petugas  WHERE nip = '$username' AND password = '$password'";
         $result = mysqli_query($db,$sql);
@@ -87,6 +90,16 @@ if (isset($_SESSION['username'])) {
                     </div>
                     
                     <label class="mt-2">Login sebagai siswa klik <a href="siswalogin.php"> disini</a></label>
+                    <?php
+                      if (isset($_GET['status'])) {
+                        # code...
+                        ?>
+                        <div class="alert alert-danger " role="alert">
+                          Userame atau Password Salah!
+                        </div>
+                        <?php
+                      }
+                    ?>
                   </form>
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1 mt-5 mb-4">
