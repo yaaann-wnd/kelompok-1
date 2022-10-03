@@ -47,8 +47,13 @@ if (isset($_POST['submit'])) {
     }else{
         $nis = $_POST['nis'];
         $total = $_POST['total'];
+        // $kodebuku = $_POST['kodebuku'];
         $petugas = $_SESSION['username'];
         
+        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'") ;
+        $getvaluestock = mysqli_fetch_array($getstock);
+        $valstock = $getvaluestock['stok']-$total;
+        $miststock = mysqli_query($db, "UPDATE `buku` SET `stok` = '$valstock' WHERE `buku`.`id_buku` = '$kodebuku';");
         $sendd = mysqli_query($db, "INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES (NULL, '$nis', '$petugas', '$tgl', '$tgl7'); ");
         $dataid = mysqli_query($db, "SELECT id_peminjaman FROM peminjaman ORDER BY id_peminjaman DESC limit 1");
         $id_peminjaman = '';
@@ -75,7 +80,7 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -102,9 +107,9 @@ if (isset($_POST['submit'])) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Peminjaman</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <h6 class="font-weight-bolder mb-0">Peminjaman</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -170,7 +175,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             
                             <div class="text-center">
-                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
                             </div>
                         </form>
                         </div>

@@ -15,21 +15,74 @@
 <?php
 include '../config.php';
 session_start();
+$date = new DateTime('now');
+$date7 = new DateTime('now');
+// echo $date->format('Y-m-d');
+$tgl=$date->format('Y-m-d');
+$date7->modify('+7 day');
+$tgl7=$date7->format('Y-m-d') . "\n";
 
+// echo $tgl;
 if (!isset($_SESSION['username'])) {
     header('location:../index.php');
 }
-$nis = $_SESSION['username'];
-$role = $_SESSION['role'];
-if ($role != 'siswa') {
-    # code...
-    $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis");
-}else{
-    $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE siswa.nis='$nis';");
+$kode = $_GET['id'];
+$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE peminjaman.id_peminjaman='$kode';");
+while($data = mysqli_fetch_array($result)){
+    $kodepinjam=$data['id_peminjaman'];
+    $judul = $data['judul'];
+    $penulis = $data['penulis'];
+    $namasiswa = $data['nama'];
+    $total = $data['kuantitas'];
+    $kodebuku = $data['id_buku'];
 }
+$result = mysqli_query($db, "SELECT * FROM siswa ");
 
-$date = new DateTime('now');
-$tgl=$date->format('Y-m-d');
+
+if (isset($_POST['submit'])) {
+    // echo "<script>alert('asd')</script>";
+    # code...
+    // $nis = $_POST['nis'];
+    // $total = $_POST['total'];
+    // echo $_POST['nis'];
+    
+    if ($_POST['ada']==null || $_POST['hilang']==null|| $_POST['denda']==null ){
+        echo "<script>alert('Tolong isi semua field')</script>";
+    }else{
+        $nis = $_POST['nis'];
+        $total = $_POST['total'];
+        $petugas = $_SESSION['username'];
+        $ada = $_POST['ada'];
+        $hilang = $_POST['hilang'];
+        $denda = $_POST['denda'];
+        $tanggal = $_POST['tanggal'];
+        $kodepinjam2 = $_POST['kodepinjam2'];
+        
+        // tambahstock
+        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'") ;
+        $getvaluestock = mysqli_fetch_array($getstock);
+        $valstock = $getvaluestock['stok']+$total;
+        $miststock = mysqli_query($db, "UPDATE `buku` SET `stok` = '$valstock' WHERE `buku`.`id_buku` = '$kodebuku';");
+        
+
+        
+        $sendd = mysqli_query($db, "INSERT INTO `pengembalian` (`id_pengembalian`, `id_peminjaman`, `tgl_pengembalian`, `denda`) VALUES (NULL, '$kodepinjam2', '$tanggal', '$denda');");
+        $dataid = mysqli_query($db, "SELECT id_pengembalian FROM pengembalian ORDER BY id_pengembalian DESC limit 1");
+        $id_pengembalian = '';
+        if ($sendd) {
+            # code...
+            while($lastid = mysqli_fetch_array($dataid)){
+                $id_pengembalian = $lastid['id_pengembalian'];
+            }
+            echo $id_pengembalian;
+            if($sendd) {
+                $sendd2 = mysqli_query($db, "INSERT INTO `detail_pengembalian` (`id_detail_kembali`, `id_pengembalian`, `ada`, `hilang`) VALUES ('', '$id_pengembalian', '$ada', '$hilang');");
+                header('location:pengembalian.php');
+            }
+        }
+        
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,119 +149,60 @@ $tgl=$date->format('Y-m-d');
         <!-- body content -->
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-header pb-0">
-                            <h6>Authors table</h6>
-                        </div>
-                        <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead class="text-center">
-                                        <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                            <?php
-                                            if ($_SESSION['role']!='siswa') {
-                                                # code...
-                                                ?>
-                                            
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th><?php
-                                            }
-                                            ?>
-                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
-                                        </tr>
-                                    </thead>
-                                    <thead class="posts-list text-center">
-                                        <?php
-                                        $no=0;
-                                        while ($data = mysqli_fetch_array($result)) {
-                                        $no++;
-                                        ?>
-                                            <tr>
-                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
-                                            
-                                                -->
-                                                <th>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?php echo $no ?></h6>
-                                                        </div>
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php 
-                                                        $num =$data['id_peminjaman'];
-                                                        
-                                                        $sql = "SELECT *  FROM pengembalian WHERE id_peminjaman = '$num'";
-                                                        $hitung = mysqli_query($db,$sql);
-                                                        $numro = mysqli_num_rows($hitung);
-                                                        if($numro == 0){
-                                                        if ($tgl>$data['tgl_kembali']) {
-                                                            # code...
-                                                            echo "telat";
-                                                        }else{
-                                                            echo "dipinjam";
-                                                        }  
-                                                        }else{
-                                                            echo "dikembalikan";
-                                                        }
-                                                    ?></h6>
-                                                    </div>
-                                                </th>
-                                                <?php
-                                                if ($_SESSION['role']!='siswa') {
-                                                    # code...
-                                                    if ($numro==0) {
-                                                        # code...
-                                                    
-                                                    ?>
-                                                
-                                                
-                                                <th class="align-middle">
-                                                    <a href="kembali.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Kembali</a>
-                                                </th> 
-                                                <?php
-                                                }
-                                                }
-                                                ?>
-                                            </tr> 
-                                        <?php
-                                        } ?>
-
-                                    </thead>
-                                </table>
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>Authors table</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                        <form role="form" method="post">
+                            <label>Kode Peminjaman</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $kodepinjam;?>" name="kodepinjam2" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
                             </div>
-                            <!-- <div class="text-center my-4">
-                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
-                            </div> -->
+                            <label>Judul</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $judul."--".$penulis;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>NIS</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $namasiswa;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Petugas</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $_SESSION['fullname'];?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Total</label>
+                            <div class="mb-3">
+                                <input readonly type="number" value="<?php echo $total;?>"  name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Tanggal Pengembalian</label>
+                            <div class="mb-3">
+                                <input readonly value="<?php echo $tgl ?>" name="tanggal" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Ada</label>
+                            <div class="mb-3">
+                                <input name="ada" class="form-control" placeholder="Ada" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Hilang</label>
+                            <div class="mb-3">
+                                <input name="hilang" class="form-control" placeholder="Hilang" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Denda</label>
+                            <div class="mb-3">
+                                <input name="denda" class="form-control" placeholder="Denda" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            
+                            <div class="text-center">
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
+                            </div>
+                        </form>
                         </div>
                     </div>
                 </div>
+            </div>
+
             </div>
             <!-- <div class="posts-list">data</div> -->
 
