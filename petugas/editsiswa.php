@@ -3,22 +3,8 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
-}
-
-if (isset($_POST['submit'])) {
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $alamat = $_POST['alamat'];
-    $kelas = $_POST['kelas'];
-
-
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
-
-    if ($query) {
-        header("location:siswa.php");
-    }
+if (!isset($_SESSION['nip'])) {
+    header('location:../loginpetugas.php');
 }
 
 ?>
@@ -48,7 +34,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -60,7 +46,11 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <div class="nama-petugas mt-4">
+                        <?php
+                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                        ?>
+                    </div>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -71,16 +61,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -96,47 +83,74 @@ if (isset($_POST['submit'])) {
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="form-wrapper">
                                 <div class="judul text-center my-4">
-                                    <h3>Tambah Siswa</h3>
+                                    <h3>Edit Siswa</h3>
                                 </div>
                                 <!-- start form -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
+                                <form action="editprosessiswa.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                    $id = $_GET['id'];
+                                    $ambil = mysqli_query($db, "select * from siswa where nis='$id'");
+                                    while ($data = mysqli_fetch_array($ambil)) {
 
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
-                                                <option disabled selected>-- Pilih Jurusan --</option>
+                                    ?>
+                                        <div class="input-1 w-50 mx-auto">
+                                            <div class="mb-3">
+                                                <label class="form-label">NIS</label>
+                                                <input type="text" class="form-control" readonly name="nis" value="<?= $data['nis'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nama</label>
+                                                <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
                                                 <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                                    echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
+                                                if ($data['jenis_kelamin'] == "P") {
+                                                    echo "<span><h6>Perempuan</h6></span>";
+                                                } else {
+                                                    echo "<span><h6>Laki-laki</h6></span>";
                                                 }
                                                 ?>
-                                            </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Pilih Jenis Kelamin</label>
+                                                <select class="form-select" required name="jenis_kelamin">
+                                                    <option disabled selected value="">-- Pilih Jenis Kelamin --</option>
+                                                    <option value="L">Laki-laki</option>
+                                                    <option value="P">Perempuan</option>
+
+                                                    <!-- <option value="L">L</option>
+                                                <option value="P">P</option> -->
+
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Alamat</label>
+                                                <input type="text" class="form-control" name="alamat" value="<?= $data['alamat'] ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Kelas</label>
+                                                <select class="form-select" aria-label="Default select example" name="kelas">
+                                                    <option disabled selected>-- Pilih Kelas --</option>
+                                                    <?php
+                                                    $ambil3 = mysqli_query($db, "select * from kelas");
+                                                    while ($data3 = mysqli_fetch_array($ambil3)) {
+                                                        if ($data['id_kelas'] == $data3['id_kelas']) {
+                                                            echo "<option value=$data3[id_kelas] selected> $data3[id_kelas] - $data3[nama_kelas]</option>";
+                                                        } else {
+                                                            echo "<option value=$data3[id_kelas]> $data3[id_kelas] - $data3[nama_kelas]</option> ";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                 </form>
                                 <!-- end form -->
                             </div>

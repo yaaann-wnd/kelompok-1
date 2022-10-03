@@ -1,3 +1,4 @@
+
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.6
@@ -112,6 +113,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -156,6 +158,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -181,6 +184,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -203,6 +207,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -225,6 +230,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -247,6 +253,7 @@
                     <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                       <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -532,6 +539,7 @@
                   style: "normal",
                   lineHeight: 2,
                 },
+
               },
             },
           },

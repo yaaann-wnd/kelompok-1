@@ -3,8 +3,8 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
+if (!isset($_SESSION['nip'])) {
+    header('location:../loginpetugas.php');
 }
 
 if (isset($_POST['submit'])) {
@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -60,7 +60,9 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <?php
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                    ?>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -71,16 +73,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -107,12 +106,10 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Jenis Kelamin</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
+                                            <select class="form-select" aria-label="Default select example" name="jenis_kelamin">
                                                 <option disabled selected>-- Pilih Jenis Kelamin --</option>
                                                 <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
+                                                <option value="P">Perempuan</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -121,13 +118,11 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
+                                            <select class="form-select" aria-label="Default select example" name="kelas">
                                                 <option disabled selected>-- Pilih Jurusan --</option>
                                                 <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
+                                                $ambil = mysqli_query($db, "select * from kelas");
+                                                while ($data = mysqli_fetch_array($ambil)) {
                                                     echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
                                                 }
                                                 ?>

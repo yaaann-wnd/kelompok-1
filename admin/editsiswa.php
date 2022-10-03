@@ -46,6 +46,7 @@ if (!isset($_SESSION['username'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -63,6 +64,7 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -98,7 +100,7 @@ if (!isset($_SESSION['username'])) {
                                                 <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
+
                                                     <?php
                                                     if ($data['jenis_kelamin'] == "P") {
                                                         echo "<span><h6>Perempuan</h6></span>";
@@ -106,6 +108,7 @@ if (!isset($_SESSION['username'])) {
                                                         echo "<span><h6>Laki-laki</h6></span>";
                                                     }
                                                     ?>                                               
+
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Pilih Jenis Kelamin</label>
@@ -113,7 +116,7 @@ if (!isset($_SESSION['username'])) {
                                                     <option disabled selected value="">-- Pilih Jenis Kelamin --</option>
                                                     <option value="L">Laki-laki</option>
                                                     <option value="P">Perempuan</option>
-                                                    
+
                                                     <!-- <option value="L">L</option>
                                                 <option value="P">P</option> -->
 

@@ -17,7 +17,9 @@ include 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
+
     header('location:../index.php');
+
 }
 
 if (isset($_POST['submit'])) {
@@ -77,13 +79,16 @@ if (isset($_POST['submit'])) {
           </div>
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
+
             <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
+
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
             </li>
 
             </li>
+
           </ul>
         </div>
       </div>

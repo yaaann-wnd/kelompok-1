@@ -1,25 +1,11 @@
 <?php
-
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
-
-if (isset($_POST['submit'])) {
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $alamat = $_POST['alamat'];
-    $kelas = $_POST['kelas'];
-
-
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
-
-    if ($query) {
-        header("location:siswa.php");
-    }
-}
+$result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.tgl_pinjam, p.tgl_kembali FROM peminjaman p join siswa s join petugas pt on p.id_siswa=s.nis and p.id_petugas=pt.nip");
 
 ?>
 <!DOCTYPE html>
@@ -48,7 +34,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -60,27 +46,19 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group">
-                            <!-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" placeholder="Type here..." /> -->
                         </div>
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
-
-                        </li>
-
                     </ul>
                 </div>
             </div>
@@ -93,54 +71,67 @@ if (isset($_POST['submit'])) {
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
+                        <div class="card-header pb-0">
+                            <h6>Tabel Peminjaman</h6>
+                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="form-wrapper">
-                                <div class="judul text-center my-4">
-                                    <h3>Tambah Siswa</h3>
-                                </div>
-                                <!-- start form -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center text-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">ID Peminjaman</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Nama Siswa</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Nama Petugas</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Tanggal Pinjam</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Tanggal Kembali</th>
+                                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="posts-list">
+                                        <?php
+                                        while ($data = mysqli_fetch_array($result)) {
+                                        ?>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['id_peminjaman'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama_petugas'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_pinjam'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="editsiswa.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Edit</a>
+                                                    <a href="deletesiswa.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-danger">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
 
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
-                                                <option disabled selected>-- Pilih Jurusan --</option>
-                                                <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                                    echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
-                                </form>
-                                <!-- end form -->
+                                    </tbody>
+                                </table>
                             </div>
-                            <!-- <div class="table-responsive p-0"></div> -->
+                            <div class="text-center my-4">
+                                <a href="tambahpeminjaman.php" class="btn bg-gradient-primary mx-auto">Tambah Peminjaman</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,7 +139,7 @@ if (isset($_POST['submit'])) {
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3 my-4">
+            <footer class="footer pt-3">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -251,8 +242,37 @@ if (isset($_POST['submit'])) {
     </div>
 
     <!-- Modal -->
-    <!-- end Modal -->
-
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Name</label>
+                            <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
+                        </div>
+                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

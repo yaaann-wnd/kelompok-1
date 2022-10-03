@@ -1,25 +1,25 @@
-<?php
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.6
+=========================================================
 
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<?php
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
+if (!isset($_SESSION['nip'])) {
+    header('location:../loginpetugas.php');
 }
-
-if (isset($_POST['submit'])) {
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $alamat = $_POST['alamat'];
-    $kelas = $_POST['kelas'];
-
-
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
-
-    if ($query) {
-        header("location:siswa.php");
-    }
-}
+$result = mysqli_query($db, "SELECT * FROM buku");
 
 ?>
 <!DOCTYPE html>
@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -60,7 +60,11 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <div class="nama-petugas mt-4">
+                        <?php
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                        ?>
+                    </div>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -71,16 +75,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -93,54 +94,92 @@ if (isset($_POST['submit'])) {
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
+                        <div class="card-header pb-0">
+                            <h6>Data Buku</h6>
+                        </div>
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="form-wrapper">
-                                <div class="judul text-center my-4">
-                                    <h3>Tambah Siswa</h3>
-                                </div>
-                                <!-- start form -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center text-center mb-0">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Buku</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penulis</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tahun</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kota</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penerbit</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sinopsis</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                            <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="posts-list">
+                                        <?php
+                                        while ($data = mysqli_fetch_array($result)) {
+                                        ?>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['id_buku'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['penulis'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['tahun'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['judul'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['kota'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['penerbit'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded-4" width="75px" alt="">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['sinopsis'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['stok'] ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="editbuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-primary">Edit</a>
+                                                    <a href="deletebuku.php?id=<?php echo $data['id_buku']; ?>" class="btn bg-gradient-danger">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        } ?>
 
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
-                                                <option disabled selected>-- Pilih Jurusan --</option>
-                                                <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                                    echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
-                                </form>
-                                <!-- end form -->
+                                    </tbody>
+                                </table>
                             </div>
-                            <!-- <div class="table-responsive p-0"></div> -->
+                            <div class="text-center my-4">
+                                <a href="tambahbuku.php" class="btn btn bg-gradient-primary mx-auto">Tambah Buku</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,7 +187,7 @@ if (isset($_POST['submit'])) {
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3 my-4">
+            <footer class="footer pt-3">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -252,7 +291,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Modal -->
     <!-- end Modal -->
-
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

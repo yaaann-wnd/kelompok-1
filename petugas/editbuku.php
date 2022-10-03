@@ -1,24 +1,9 @@
 <?php
-
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    header('location:../index.php');
-}
-
-if (isset($_POST['submit'])) {
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $alamat = $_POST['alamat'];
-    $kelas = $_POST['kelas'];
-
-
-    $query = mysqli_query($db, "INSERT INTO siswa(nama, jenis_kelamin, alamat, id_kelas) values('$nama', '$jenis_kelamin', '$alamat', '$kelas')");
-
-    if ($query) {
-        header("location:siswa.php");
-    }
+if (!isset($_SESSION['nip'])) {
+    header('location:../loginpetugas.php');
 }
 
 ?>
@@ -48,7 +33,7 @@ if (isset($_POST['submit'])) {
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -60,7 +45,11 @@ if (isset($_POST['submit'])) {
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-
+                    <div class="nama-petugas mt-4">
+                        <?php
+                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                        ?>
+                    </div>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -71,16 +60,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-
-                        <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
-
+                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
                         </li>
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -96,49 +82,76 @@ if (isset($_POST['submit'])) {
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="form-wrapper">
                                 <div class="judul text-center my-4">
-                                    <h3>Tambah Siswa</h3>
+                                    <h3>Edit Buku</h3>
                                 </div>
-                                <!-- start form -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="input-1 w-50 mx-auto">
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name="nama">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Jenis Kelamin</label>
+                                <form action="editbukuproses.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                    $id = $_GET['id'];
+                                    $ambil = mysqli_query($db, "select * from buku where id_buku='$id'");
+                                    while ($data = mysqli_fetch_array($ambil)) {
 
-                                            <select class="form-select" aria-label="Default select example"name="jenis_kelamin">
-                                                <option disabled selected>-- Pilih Jenis Kelamin --</option>
-                                                <option value="L">Laki-Laki</option>
-                                                <option value="P">Perempuan</option>                                               
-
-                                            </select>
+                                    ?>
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="input-1 w-50 ms-auto">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="idm">ID Buku</label>
+                                                        <input type="text" id="idm" class="form-control" readonly name="id_buku" value="<?php echo $data['id_buku']; ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Penulis</label>
+                                                        <input type="text" class="form-control" name="penulis" value="<?php echo $data['penulis']; ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Judul</label>
+                                                        <input type="text" class="form-control" name="judul" value="<?php echo $data['judul']; ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Tahun</label>
+                                                        <input type="number" class="form-control" min="1900" max="2099" name="tahun" value="<?php echo $data['tahun']; ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Penerbit</label>
+                                                        <input type="text" class="form-control" name="penerbit" value="<?php echo $data['penerbit']; ?>">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Kota</label>
+                                                        <input type="text" class="form-control" name="kota" value="<?php echo $data['kota']; ?>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="input-2 w-50">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Sinopsis</label>
+                                                        <textarea name="sinopsis" class="form-control" rows="3"><?php echo $data['sinopsis']; ?></textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Stok</label>
+                                                        <input type="number" class="form-control" name="stok" value="<?php echo $data['stok']; ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Cover</label>
+                                                        <input type="file" class="form-control" name="cover">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label d-block">Cover sebelumnya : </label>
+                                                        <img src="../bootstrap/img/<?= $data['cover'] ?>" class="rounded" width="70px" alt="">
+                                                        <?php
+                                                        if ($data['cover'] == "") { ?>
+                                                            <img src="https://via.placeholder.com/500x500.png?text=PAS+FOTO+SISWA" width="70px" class="rounded">
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat">
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary" name="submit">Gasss</button>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Kelas</label>
-
-                                            <select class="form-select" aria-label="Default select example"name="kelas">
-                                                <option disabled selected>-- Pilih Jurusan --</option>
-                                                <?php
-                                                    $ambil = mysqli_query($db, "select * from kelas");
-                                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                                    echo "<option value=$data[id_kelas]>$data[nama_kelas] </option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                    </div>
+                                    <?php
+                                    }
+                                    ?>
                                 </form>
-                                <!-- end form -->
                             </div>
                             <!-- <div class="table-responsive p-0"></div> -->
                         </div>
@@ -148,7 +161,7 @@ if (isset($_POST['submit'])) {
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3 my-4">
+            <footer class="footer pt-3">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -251,8 +264,37 @@ if (isset($_POST['submit'])) {
     </div>
 
     <!-- Modal -->
-    <!-- end Modal -->
-
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Name</label>
+                            <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
+                        </div>
+                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

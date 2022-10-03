@@ -17,7 +17,9 @@ include 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
+
     header('location:../index.php');
+
 }
 
 if (isset($_POST['submit'])) {
@@ -28,6 +30,7 @@ if (isset($_POST['submit'])) {
   $cpassword = $_POST['cpassword'];
 
   $sqlcek = mysqli_query($db, "SELECT * FROM petugas WHERE nama='$nama'");
+
   $cek = mysqli_num_rows($sqlcek);
 
   if ($cek > 0) {
@@ -36,6 +39,7 @@ if (isset($_POST['submit'])) {
     echo "<script>alert('Password harus sama!')</script>";
   } else {
     $query = mysqli_query($db, "INSERT INTO petugas(nama, jenis_kelamin, alamat, password) values ('$nama', '$jenis_kelamin', '$alamat', '$password')");
+
 
     if ($query) {
       echo "<script>alert('Petugas berhasil ditambahkan')</script>";
@@ -84,6 +88,7 @@ if (isset($_POST['submit'])) {
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -94,13 +99,16 @@ if (isset($_POST['submit'])) {
           </div>
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
+
             <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
+
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
             </li>
 
             </li>
+
           </ul>
         </div>
       </div>
