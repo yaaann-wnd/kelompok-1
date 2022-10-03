@@ -1,36 +1,21 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.6
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <?php
 include '../admin/config.php';
 session_start();
-// // session_start();
-// $date = new DateTime('now');
-// $date7 = new DateTime('now');
-// // echo $date->format('Y-m-d');
-// $tgl = $date->format('Y-m-d');
-// $date7->modify('+7 day');
-// $tgl7 = $date7->format('Y-m-d') . "\n";
+$date = new DateTime('now');
+$date7 = new DateTime('now');
+// echo $date->format('Y-m-d');
+$tgl=$date->format('Y-m-d');
+$date7->modify('+7 day');
+$tgl7=$date7->format('Y-m-d') . "\n";
 
 // echo $tgl;
-
 if (!isset($_SESSION['username']) && !isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
 $kodebuku = $_GET['id'];
 $result = mysqli_query($db, "SELECT * FROM buku WHERE id_buku='$kodebuku'");
-while ($data = mysqli_fetch_array($result)) {
+while($data = mysqli_fetch_array($result)){
     $judul = $data['judul'];
     $penulis = $data['penulis'];
 }
@@ -43,33 +28,34 @@ if (isset($_POST['submit'])) {
     // $nis = $_POST['nis'];
     // $total = $_POST['total'];
     // echo $_POST['nis'];
-
-    if ($_POST['nis'] == null || $_POST['total'] == null) {
+    
+    if ($_POST['nis']==null || $_POST['total']==null ){
         echo "<script>alert('Tolong isi semua field')</script>";
-    } else {
+    }else{
         $nis = $_POST['nis'];
         $total = $_POST['total'];
         // $kodebuku = $_POST['kodebuku'];
-        $petugas = $_SESSION['username'];
-
-        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'");
+        $petugas = $_SESSION['nip'];
+        
+        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'") ;
         $getvaluestock = mysqli_fetch_array($getstock);
-        $valstock = $getvaluestock['stok'] - $total;
+        $valstock = $getvaluestock['stok']-$total;
         $miststock = mysqli_query($db, "UPDATE `buku` SET `stok` = '$valstock' WHERE `buku`.`id_buku` = '$kodebuku';");
-        $sendd = mysqli_query($db, "INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES (NULL, '$nis', '$petugas', '$tgl', '$tgl7'); ");
+        $sendd = mysqli_query($db, "INSERT INTO `peminjaman` (`id_peminjaman`, `id_siswa`, `id_petugas`, `tgl_pinjam`, `tgl_kembali`) VALUES (NULL, '$nis', '$petugas', '$tgl', '$tgl7')");
         $dataid = mysqli_query($db, "SELECT id_peminjaman FROM peminjaman ORDER BY id_peminjaman DESC limit 1");
         $id_peminjaman = '';
         if ($sendd) {
             # code...
-            while ($lastid = mysqli_fetch_array($dataid)) {
+            while($lastid = mysqli_fetch_array($dataid)){
                 $id_peminjaman = $lastid['id_peminjaman'];
             }
             echo $id_peminjaman;
-            if ($sendd) {
+            if($sendd) {
                 $sendd2 = mysqli_query($db, "INSERT INTO `detail_peminjaman` (`id_detail_pinjam`, `id_buku`, `id_peminjaman`, `kuantitas`) VALUES (NULL, '$kodebuku', '$id_peminjaman', '$total');");
                 header('location:peminjaman.php');
             }
         }
+        
     }
 }
 ?>
@@ -138,51 +124,51 @@ if (isset($_POST['submit'])) {
         <!-- body content -->
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-header pb-0">
-                            <h6>Authors table</h6>
-                        </div>
-                        <div class="card-body px-0 pt-0 pb-2">
-                            <div class="container">
-                                <form role="form" method="post">
-                                    <label>Kode Buku</label>
-                                    <div class="mb-3">
-                                        <input readonly type="text" value="<?php echo $kodebuku; ?>" name="kodebuku" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
-                                    </div>
-                                    <label>Judul</label>
-                                    <div class="mb-3">
-                                        <input readonly type="text" name="judul" value="<?php echo $judul . "--" . $penulis; ?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
-                                    </div>
-                                    <label>NIS</label>
-                                    <select name="nis" class="form-select" aria-label="Default select example">
-                                        <option selected></option>
-                                        <?php
-                                        while ($data = mysqli_fetch_array($result)) {
-
-                                        ?>
-                                            <option value="<?php echo $data['nis']; ?>"><?php echo $data['nis'] . '.' . $data['nama']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                    <label>Petugas</label>
-                                    <div class="mb-3">
-                                        <input readonly type="text" value="<?php echo $_SESSION['username']; ?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
-                                    </div>
-                                    <label>Total</label>
-                                    <div class="mb-3">
-                                        <input type="number" name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
-                                    </div>
-                                </form>
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>Authors table</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                        <form role="form" method="post">
+                            <label>Kode Buku</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $kodebuku;?>" name="kodebuku" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
                             </div>
+                            <label>Judul</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $judul." - ".$penulis;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>NIS</label>
+                            <select name="nis" class="form-select" aria-label="Default select example">
+                                <option selected></option>
+                                <?php 
+                                    while($data = mysqli_fetch_array($result)){
+                                     
+                                ?>
+                                <option value="<?php echo $data['nis'];?>"><?php echo $data['nis'].'.'.$data['nama'];?></option>
+                                <?php
+                                    }
+                                ?>
+                            </select>
+                            <label>Petugas</label>
+                            <div class="mb-3">
+                                <input readonly type="text"  value="<?php echo $_SESSION['nip'];?>" name="username" class="form-control text-uppercase text-danger" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Total</label>
+                            <div class="mb-3">
+                                <input type="number" name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            
+                            <div class="text-center">
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
+                            </div>
+                        </form>
                         </div>
                     </div>
                 </div>
+            </div>
 
             </div>
             <!-- <div class="posts-list">data</div> -->
@@ -290,7 +276,7 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal -->    
     <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
@@ -315,3 +301,4 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
+

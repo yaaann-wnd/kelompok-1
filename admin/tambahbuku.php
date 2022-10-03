@@ -3,7 +3,7 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
 
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Stok</label>
-                                                    <input type="number" class="form-control" name="stok">
+                                                    <input type="number" min="1" class="form-control" name="stok">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Cover</label>

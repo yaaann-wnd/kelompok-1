@@ -1,12 +1,91 @@
-<?php
-include 'config.php';
-session_start();
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.6
+=========================================================
 
-if (!isset($_SESSION['username'])) {
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<?php
+include '../admin/config.php';
+session_start();
+$date = new DateTime('now');
+$date7 = new DateTime('now');
+// echo $date->format('Y-m-d');
+$tgl = $date->format('Y-m-d');
+$date7->modify('+7 day');
+$tgl7 = $date7->format('Y-m-d') . "\n";
+
+// echo $tgl;
+if (!isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
-$result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.tgl_pinjam, p.tgl_kembali FROM peminjaman p join siswa s join petugas pt on p.id_siswa=s.nis and p.id_petugas=pt.nip");
+$kode = $_GET['id'];
+$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa join kelas ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis AND siswa.id_kelas=kelas.id_kelas WHERE peminjaman.id_peminjaman='$kode';");
+while ($data = mysqli_fetch_array($result)) {
+    $kodepinjam = $data['id_peminjaman'];
+    $judul = $data['judul'];
+    $cover = $data['cover'];
+    $penulis = $data['penulis'];
+    $namasiswa = $data['nama'];
+    $tglpinjam = $data['tgl_pinjam'];
+    $total = $data['kuantitas'];
+    $kodebuku = $data['id_buku'];
+    $namakelas = $data['nama_kelas'];
+}
+$result = mysqli_query($db, "SELECT * FROM siswa ");
 
+
+if (isset($_POST['submit'])) {
+    // echo "<script>alert('asd')</script>";
+    # code...
+    // $nis = $_POST['nis'];
+    // $total = $_POST['total'];
+    // echo $_POST['nis'];
+
+    if ($_POST['ada'] == null || $_POST['hilang'] == null || $_POST['denda'] == null) {
+        echo "<script>alert('Tolong isi semua field')</script>";
+    } else {
+        $nis = $_POST['nis'];
+        $total = $_POST['total'];
+        $petugas = $_SESSION['username'];
+        $ada = $_POST['ada'];
+        $hilang = $_POST['hilang'];
+        $denda = $_POST['denda'];
+        $tanggal = $_POST['tanggal'];
+        $kodepinjam2 = $_POST['kodepinjam2'];
+        // $cover = $_POST['cover'];
+
+        // tambahstock
+        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'");
+        $getvaluestock = mysqli_fetch_array($getstock);
+        $valstock = $getvaluestock['stok'] + $total;
+        $miststock = mysqli_query($db, "UPDATE `buku` SET `stok` = '$valstock' WHERE `buku`.`id_buku` = '$kodebuku';");
+
+
+
+        $sendd = mysqli_query($db, "INSERT INTO `pengembalian` (`id_pengembalian`, `id_peminjaman`, `tgl_pengembalian`, `denda`) VALUES (NULL, '$kodepinjam2', '$tanggal', '$denda');");
+        $dataid = mysqli_query($db, "SELECT id_pengembalian FROM pengembalian ORDER BY id_pengembalian DESC limit 1");
+        $id_pengembalian = '';
+        if ($sendd) {
+            # code...
+            while ($lastid = mysqli_fetch_array($dataid)) {
+                $id_pengembalian = $lastid['id_pengembalian'];
+            }
+            echo $id_pengembalian;
+            if ($sendd) {
+                $sendd2 = mysqli_query($db, "INSERT INTO `detail_pengembalian` (`id_detail_kembali`, `id_pengembalian`, `ada`, `hilang`) VALUES ('', '$id_pengembalian', '$ada', '$hilang');");
+                header('location:pengembalian.php');
+            }
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +95,7 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -34,7 +113,7 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -43,9 +122,9 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pengembalian</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <h6 class="font-weight-bolder mb-0">Pengembalian</h6>
                     <div class="nama-petugas">
                         <h4 class="font-weight-bolder text-warning text-gradient">Admin</h4>
                     </div>
@@ -53,8 +132,6 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group">
-                            <!-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" placeholder="Type here..." /> -->
                         </div>
                     </div>
                     <ul class="navbar-nav justify-content-end">
@@ -63,6 +140,8 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
+                        </li>
+
                         </li>
                     </ul>
                 </div>
@@ -77,71 +156,67 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header pb-0">
-                            <h6>Tabel Peminjaman</h6>
+                            <h6>Details</h6>
+                            <img src="../bootstrap/img/<?= $cover ?>" class="rounded-4" width="75px" alt="">
                         </div>
+                        <!-- s -->
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">ID Peminjaman</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Nama Siswa</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Nama Petugas</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Tanggal Pinjam</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Tanggal Kembali</th>
-                                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="posts-list">
-                                        <?php
-                                        while ($data = mysqli_fetch_array($result)) {
-                                        ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?php echo $data['id_peminjaman'] ?></h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama_petugas'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_pinjam'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="editsiswa.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Edit</a>
-                                                    <a href="deletesiswa.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-danger">Delete</a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                        }
-                                        ?>
-
-                                    </tbody>
-                                </table>
+                            <div class="container">
+                                <form role="form" method="post">
+                                    <label>Kode Peminjaman</label>
+                                    <div class="mb-3">
+                                        <input readonly type="text" value="<?php echo $kodepinjam; ?>" name="kodepinjam2" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Judul</label>
+                                    <div class="mb-3">
+                                        <input readonly type="text" name="judul" value="<?php echo $judul . " - " . $penulis; ?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>NIS</label>
+                                    <div class="mb-3">
+                                        <input readonly type="text" name="judul" value="<?php echo $namasiswa; ?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Kelas</label>
+                                    <div class="mb-3">
+                                        <input readonly type="text" name="kelas" value="<?php echo $namakelas; ?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Petugas</label>
+                                    <div class="mb-3">
+                                        <input readonly type="text" value="<?php echo $_SESSION['nip']; ?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Total</label>
+                                    <div class="mb-3">
+                                        <input readonly type="number" value="<?php echo $total; ?>" name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Tanggal Pinjam</label>
+                                    <div class="mb-3">
+                                        <input readonly value="<?php echo $tglpinjam ?>" name="pinjam" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Tanggal Pengembalian</label>
+                                    <div class="mb-3">
+                                        <input readonly value="<?php echo $tgl ?>" name="tanggal" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
+                                    </div>
+                                    <!-- <label>Ada</label>
+                            <div class="mb-3">
+                                <input name="ada" class="form-control" placeholder="Ada" aria-label="Email" aria-describedby="email-addon">
                             </div>
-                            <div class="text-center my-4">
-                                <a href="tambahpeminjaman.php" class="btn bg-gradient-primary mx-auto">Tambah Peminjaman</a>
+                            <label>Hilang</label>
+                            <div class="mb-3">
+                                <input name="hilang" class="form-control" placeholder="Hilang" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Denda</label>
+                            <div class="mb-3">
+                                <input name="denda" class="form-control" placeholder="Denda" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            
+                            <div class="text-center">
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
+                            </div> -->
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
             <!-- <div class="posts-list">data</div> -->
 
@@ -249,37 +324,7 @@ $result = mysqli_query($db, "SELECT p.id_peminjaman, s.nama, pt.nama_petugas, p.
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update data User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Name</label>
-                            <input type="text" value="nama sekarang" class="form-control" id="updatenama" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="updateemail" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="updatepassword" aria-describedby="emailHelp">
-                        </div>
-                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" onclick="submitupdate()" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

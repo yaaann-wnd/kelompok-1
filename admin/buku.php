@@ -16,10 +16,10 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
-$result = mysqli_query($db, "SELECT * FROM buku");
+$result = mysqli_query($db, "SELECT * FROM buku where stok > 0");
 
 ?>
 <!DOCTYPE html>

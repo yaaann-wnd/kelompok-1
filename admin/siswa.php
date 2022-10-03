@@ -2,7 +2,7 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
 $result = mysqli_query($db, "SELECT * FROM siswa join kelas on siswa.id_kelas=kelas.id_kelas");

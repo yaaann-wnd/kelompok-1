@@ -9,7 +9,7 @@
   <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link active" href="dashboard.php">
+        <a class="nav-link active" href="../admin/dashboard.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>shop</title>
@@ -35,7 +35,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="siswa.php">
+        <a class="nav-link" href="../admin/siswa.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-single-02 text-primary text-sm" aria-hidden="true"></i>
           </div>
@@ -43,7 +43,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="buku.php">
+        <a class="nav-link" href="../admin/buku.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">            
             <i class="ni ni-books text-primary text-sm" aria-hidden="true"></i>
           </div>
@@ -51,7 +51,23 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="peminjaman.php">
+        <a class="nav-link" href="../admin/petugas.php">
+          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-badge text-primary text-sm" aria-hidden="true"></i>
+          </div>
+          <span class="nav-link-text ms-1">Petugas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../admin/kelas.php">
+          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-ruler-pencil text-primary text-sm" aria-hidden="true"></i>
+          </div>
+          <span class="nav-link-text ms-1">Kelas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../peminjaman/peminjaman.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-book-bookmark text-primary text-sm" aria-hidden="true"></i>
           </div>
@@ -59,7 +75,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pengembalian.php">
+        <a class="nav-link" href="../pengembalian/pengembalian.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-folder-17 text-primary text-sm" aria-hidden="true"></i>
           </div>
@@ -68,4 +84,4 @@
       </li>
     </ul>
   </div>
-</aside>
+</aside>;

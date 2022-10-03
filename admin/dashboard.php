@@ -2,7 +2,7 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nip'])) {
   header('location:../index.php');
 }
 
@@ -154,7 +154,7 @@ $jumlahbuku = mysqli_fetch_array($buku);
                   <div class="numbers">
                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Current User</p>
                     <h6 class="font-weight-bolder mb-0 text-uppercase text-primary text-gradient">
-                      <?php echo $_SESSION['username']; ?>
+                      <?php echo $_SESSION['nama_petugas']; ?>
                       <!-- <span class="text-success text-sm font-weight-bolder">Test</span> -->
                     </h6>
                   </div>

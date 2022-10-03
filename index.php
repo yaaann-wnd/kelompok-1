@@ -7,15 +7,22 @@ if (isset($_SESSION['username'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $username = $_POST['username'];
+    $nip = $_POST['nip'];
     $password = $_POST['password'];
 
-    $query = mysqli_query($db, "SELECT * FROM admin WHERE username='$username' AND password='$password'");
+    $query = mysqli_query($db, "SELECT * FROM petugas WHERE nip='$nip' AND password='$password'");
     $data = mysqli_fetch_array($query);
 
     if ($data) {
-        $_SESSION['username'] = $data['username'];
-        header('location:admin/dashboard.php');
+        if ($data['role'] == 1) {
+            $_SESSION['nama_petugas'] = $data['nama_petugas'];
+            $_SESSION['nip'] = $data['nip'];
+            header('location:admin/dashboard.php');
+        } else {
+            $_SESSION['nama_petugas'] = $data['nama_petugas'];
+            $_SESSION['nip'] = $data['nip'];
+            header('location: petugas/dashboard.php');
+        }
     } else { ?>
         <script>
             alert("Username atau Password anda SALAH")
@@ -64,7 +71,7 @@ if (isset($_POST['submit'])) {
                                     <form role="form" method="POST">
                                         <label>Username</label>
                                         <div class="mb-3">
-                                            <input type="text" class="form-control" name="username" placeholder="Username" aria-label="Email">
+                                            <input type="text" class="form-control" name="nip" placeholder="Username" aria-label="Email">
                                         </div>
                                         <label>Password</label>
                                         <div class="mb-3">
@@ -81,11 +88,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                     <p class="mb-4 text-sm mx-auto">
-                                        Login sebagai petugas?
-                                        <a href="loginpetugas.php" class="text-warning text-gradient font-weight-bold">Klik disini</a>
-                                    </p>
-                                    <p class="mb-4 text-sm mx-auto">
-                                        Masuk sebagai siswa?
+                                        Login sebagai siswa?
                                         <a href="loginsiswa.php" class="text-warning text-gradient font-weight-bold">Klik disini</a>
                                     </p>
                                 </div>

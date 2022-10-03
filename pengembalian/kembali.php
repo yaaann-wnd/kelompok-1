@@ -13,7 +13,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <?php
-include '../config.php';
+include '../admin/config.php';
 session_start();
 $date = new DateTime('now');
 $date7 = new DateTime('now');
@@ -22,19 +22,20 @@ $tgl=$date->format('Y-m-d');
 $date7->modify('+7 day');
 $tgl7=$date7->format('Y-m-d') . "\n";
 
-// echo $tgl;
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username']) && !isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
 $kode = $_GET['id'];
-$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE peminjaman.id_peminjaman='$kode';");
+$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa join kelas ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis AND siswa.id_kelas=kelas.id_kelas WHERE peminjaman.id_peminjaman='$kode';;");
 while($data = mysqli_fetch_array($result)){
     $kodepinjam=$data['id_peminjaman'];
     $judul = $data['judul'];
     $penulis = $data['penulis'];
     $namasiswa = $data['nama'];
+    $tglpinjam = $data['tgl_pinjam'];
     $total = $data['kuantitas'];
     $kodebuku = $data['id_buku'];
+    $namakelas = $data['nama_kelas'];
 }
 $result = mysqli_query($db, "SELECT * FROM siswa ");
 
@@ -169,13 +170,21 @@ if (isset($_POST['submit'])) {
                             <div class="mb-3">
                                 <input readonly type="text" name="judul" value="<?php echo $namasiswa;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
                             </div>
+                            <label>Kelas</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="kelas" value="<?php echo $namakelas;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
                             <label>Petugas</label>
                             <div class="mb-3">
-                                <input readonly type="text" value="<?php echo $_SESSION['fullname'];?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                                <input readonly type="text" value="<?php echo $_SESSION['nip'];?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
                             </div>
                             <label>Total</label>
                             <div class="mb-3">
                                 <input readonly type="number" value="<?php echo $total;?>"  name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Tanggal Pinjam</label>
+                            <div class="mb-3">
+                                <input readonly value="<?php echo $tglpinjam ?>" name="pinjam" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
                             </div>
                             <label>Tanggal Pengembalian</label>
                             <div class="mb-3">

@@ -3,15 +3,17 @@
 include '../admin/config.php';
 session_start();
 
-if (!isset($_SESSION['username']) && !isset($_SESSION)) {
+if (!isset($_SESSION['username']) && !isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
 
 $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis");
 
+
 // $nis = $_SESSION['username'];
 // $role = $_SESSION['role'];
 // if ($role != 'siswa') {
+//     # code...
 //     $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis");
 // }else{
 //     $result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis WHERE siswa.nis='$nis';");
@@ -46,7 +48,7 @@ $tgl=$date->format('Y-m-d');
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include '../peminjaman/sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -92,14 +94,15 @@ $tgl=$date->format('Y-m-d');
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
+                                <table class="table align-items-center text-center mb-0">
                                     <thead class="text-center">
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Siswa</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pengembalian</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>                                            
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>                                           
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                         </tr>
                                     </thead>
@@ -109,6 +112,7 @@ $tgl=$date->format('Y-m-d');
                                         while ($data = mysqli_fetch_array($result)) {
                                         $no++;
                                         ?>
+                                            <tr>
                                                 <th>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -128,24 +132,28 @@ $tgl=$date->format('Y-m-d');
                                                 </th>
                                                 <th>
                                                     <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?php echo $data['nama'] ?></h6>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm"><?php echo $data['tgl_kembali'] ?></h6>
                                                     </div>
                                                 </th>
                                                 <th>
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">
-                                                        <?php 
+                                                        <h6 class="mb-0 text-sm"><?php 
                                                         $num =$data['id_peminjaman'];
                                                         
-                                                        $sql = "SELECT * FROM pengembalian WHERE id_peminjaman = '$num'";
+                                                        $sql = "SELECT *  FROM pengembalian WHERE id_peminjaman = '$num'";
                                                         $hitung = mysqli_query($db,$sql);
                                                         $numro = mysqli_num_rows($hitung);
                                                         if($numro == 0){
-                                                        if ($tgl > $data['tgl_kembali']) {
+                                                        if ($tgl>$data['tgl_kembali']) {
                                                             echo "telat";
-                                                        }else{
+                                                            }else{
                                                             echo "dipinjam";
-                                                        }  
+                                                            }  
                                                         }else{
                                                             echo "dikembalikan";
                                                         }
@@ -153,24 +161,33 @@ $tgl=$date->format('Y-m-d');
                                                     </div>
                                                 </th>
                                                 <?php
-                                                    if ($numro==0) {                                                    
-                                                ?>
                                                 
+                                                    if ($numro==0) {
+                                                    
+                                                ?>                                               
                                                 
-                                                <th class="align-middle">
+                                                <th class="text-center">
                                                     <a href="kembali.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-primary">Kembali</a>
                                                 </th> 
                                                 <?php
-                                                }
-                                                
+                                                }else{
+                                                    ?>
+                                                    <th class="text-center">
+                                                    <a href="detail.php?id=<?php echo $data['id_peminjaman']; ?>" class="btn bg-gradient-secondary">Detail</a>
+                                                </th> 
+                                                <?php                                            
+                                                    }
                                                 ?>
+                                                
+                                                
                                             </tr> 
                                         <?php
                                         } ?>
 
+
                                     </thead>
                                 </table>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -281,6 +298,7 @@ $tgl=$date->format('Y-m-d');
     </div>
 
     <!-- Modal -->    
+    
     <!-- end Modal -->
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
@@ -290,6 +308,11 @@ $tgl=$date->format('Y-m-d');
     <script src="../assets/js/plugins/chartjs.min.js"></script>
 
     <script>
+        function modalfunc(a) {
+            console.log(a);
+            var var_example = a;
+            
+        }
         var win = navigator.platform.indexOf("Win") > -1;
         if (win && document.querySelector("#sidenav-scrollbar")) {
             var options = {

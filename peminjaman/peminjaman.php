@@ -19,7 +19,6 @@ session_start();
 if (!isset($_SESSION['username']) && !isset($_SESSION['nip'])) {
     header('location:../index.php');
 }
-
 $result = mysqli_query($db, "SELECT * FROM buku");
 
 ?>
@@ -49,7 +48,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
 
 <body class="g-sidenav-show bg-gray-100">
     <!-- include sidemenu -->
-    <?php include '../sidemenu.php'; ?>
+    <?php include 'sidemenu.php'; ?>
     <!-- end include sidemenu -->
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <!-- Navbar -->
@@ -98,7 +97,7 @@ $result = mysqli_query($db, "SELECT * FROM buku");
                                 <table class="table align-items-center mb-0">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Peminjaman</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>

@@ -1,12 +1,92 @@
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.6
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
 <?php
-
-include 'config.php';
+include '../admin/config.php';
 session_start();
+$date = new DateTime('now');
+$date7 = new DateTime('now');
+// echo $date->format('Y-m-d');
+$tgl=$date->format('Y-m-d');
+$date7->modify('+7 day');
+$tgl7=$date7->format('Y-m-d') . "\n";
 
-if (!isset($_SESSION['nip'])) {
-    header('location:../loginpetugas.php');
+// echo $tgl;
+if (!isset($_SESSION['username']) && !isset($_SESSION['nip'])) {
+    header('location:../index.php');
 }
+$kode = $_GET['id'];
+$result = mysqli_query($db, "SELECT * FROM detail_peminjaman JOIN buku JOIN peminjaman join siswa join kelas ON detail_peminjaman.id_buku=buku.id_buku AND detail_peminjaman.id_peminjaman=peminjaman.id_peminjaman and peminjaman.id_siswa=siswa.nis AND siswa.id_kelas=kelas.id_kelas WHERE peminjaman.id_peminjaman='$kode';");
+while($data = mysqli_fetch_array($result)){
+    $kodepinjam=$data['id_peminjaman'];
+    $judul = $data['judul'];
+    $cover = $data['cover'];
+    $penulis = $data['penulis'];
+    $namasiswa = $data['nama'];
+    $tglpinjam = $data['tgl_pinjam'];
+    $total = $data['kuantitas'];
+    $kodebuku = $data['id_buku'];
+    $namakelas = $data['nama_kelas'];
+}
+$result = mysqli_query($db, "SELECT * FROM siswa ");
 
+
+if (isset($_POST['submit'])) {
+    // echo "<script>alert('asd')</script>";
+    # code...
+    // $nis = $_POST['nis'];
+    // $total = $_POST['total'];
+    // echo $_POST['nis'];
+    
+    if ($_POST['ada']==null || $_POST['hilang']==null|| $_POST['denda']==null ){
+        echo "<script>alert('Tolong isi semua field')</script>";
+    }else{
+        $nis = $_POST['nis'];
+        $total = $_POST['total'];
+        $petugas = $_SESSION['username'];
+        $ada = $_POST['ada'];
+        $hilang = $_POST['hilang'];
+        $denda = $_POST['denda'];
+        $tanggal = $_POST['tanggal'];
+        $kodepinjam2 = $_POST['kodepinjam2'];
+        // $cover = $_POST['cover'];
+        
+        // tambahstock
+        $getstock = mysqli_query($db, "SELECT stok FROM `buku` where id_buku = '$kodebuku'") ;
+        $getvaluestock = mysqli_fetch_array($getstock);
+        $valstock = $getvaluestock['stok']+$total;
+        $miststock = mysqli_query($db, "UPDATE `buku` SET `stok` = '$valstock' WHERE `buku`.`id_buku` = '$kodebuku';");
+        
+
+        
+        $sendd = mysqli_query($db, "INSERT INTO `pengembalian` (`id_pengembalian`, `id_peminjaman`, `tgl_pengembalian`, `denda`) VALUES (NULL, '$kodepinjam2', '$tanggal', '$denda');");
+        $dataid = mysqli_query($db, "SELECT id_pengembalian FROM pengembalian ORDER BY id_pengembalian DESC limit 1");
+        $id_pengembalian = '';
+        if ($sendd) {
+            # code...
+            while($lastid = mysqli_fetch_array($dataid)){
+                $id_pengembalian = $lastid['id_pengembalian'];
+            }
+            echo $id_pengembalian;
+            if($sendd) {
+                $sendd2 = mysqli_query($db, "INSERT INTO `detail_pengembalian` (`id_detail_kembali`, `id_pengembalian`, `ada`, `hilang`) VALUES ('', '$id_pengembalian', '$ada', '$hilang');");
+                header('location:pengembalian.php');
+            }
+        }
+        
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +96,7 @@ if (!isset($_SESSION['nip'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Ersa Web App</title>
+    <title>Perpustakaan</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -43,12 +123,12 @@ if (!isset($_SESSION['nip'])) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pengembalian</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                    <h6 class="font-weight-bolder mb-0">Pengembalian</h6>
                     <div class="nama-petugas mt-4">
                         <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
                         ?>
                     </div>
                 </nav>
@@ -78,91 +158,75 @@ if (!isset($_SESSION['nip'])) {
         <!-- body content -->
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-body px-0 pt-0 pb-2">
-                            <div class="form-wrapper">
-                                <div class="judul text-center my-4">
-                                    <h3>Edit Siswa</h3>
-                                </div>
-                                <!-- start form -->
-                                <form action="editprosessiswa.php" method="post" enctype="multipart/form-data">
-                                    <?php
-                                    $id = $_GET['id'];
-                                    $ambil = mysqli_query($db, "select * from siswa where nis='$id'");
-                                    while ($data = mysqli_fetch_array($ambil)) {
-
-                                    ?>
-                                        <div class="input-1 w-50 mx-auto">
-                                            <div class="mb-3">
-                                                <label class="form-label">NIS</label>
-                                                <input type="text" class="form-control" readonly name="nis" value="<?= $data['nis'] ?>">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Nama</label>
-                                                <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Jenis kelamin sebelumnya : </label>
-                                                <?php
-                                                if ($data['jenis_kelamin'] == "P") {
-                                                    echo "<span><h6>Perempuan</h6></span>";
-                                                } else {
-                                                    echo "<span><h6>Laki-laki</h6></span>";
-                                                }
-                                                ?>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Pilih Jenis Kelamin</label>
-                                                <select class="form-select" required name="jenis_kelamin">
-                                                    <option disabled selected value="">-- Pilih Jenis Kelamin --</option>
-                                                    <option value="L">Laki-laki</option>
-                                                    <option value="P">Perempuan</option>
-
-                                                    <!-- <option value="L">L</option>
-                                                <option value="P">P</option> -->
-
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Alamat</label>
-                                                <input type="text" class="form-control" name="alamat" value="<?= $data['alamat'] ?>">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Kelas</label>
-                                                <select class="form-select" aria-label="Default select example" name="kelas">
-                                                    <option disabled selected>-- Pilih Kelas --</option>
-                                                    <?php
-                                                    $ambil3 = mysqli_query($db, "select * from kelas");
-                                                    while ($data3 = mysqli_fetch_array($ambil3)) {
-                                                        if ($data['id_kelas'] == $data3['id_kelas']) {
-                                                            echo "<option value=$data3[id_kelas] selected> $data3[id_kelas] - $data3[nama_kelas]</option>";
-                                                        } else {
-                                                            echo "<option value=$data3[id_kelas]> $data3[id_kelas] - $data3[nama_kelas]</option> ";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn bg-gradient-primary" name="submit">Gasss</button>
-                                        </div>
-                                    <?php
-                                    }
-                                    ?>
-                                </form>
-                                <!-- end form -->
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>Details</h6>
+                        <img src="../bootstrap/img/<?= $cover ?>" class="rounded-4" width="75px" alt="">
+                    </div>
+                    <!-- s -->
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                        <form role="form" method="post">
+                            <label>Kode Peminjaman</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $kodepinjam;?>" name="kodepinjam2" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
                             </div>
-                            <!-- <div class="table-responsive p-0"></div> -->
+                            <label>Judul</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $judul." - ".$penulis;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>NIS</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="judul" value="<?php echo $namasiswa;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Kelas</label>
+                            <div class="mb-3">
+                                <input readonly type="text" name="kelas" value="<?php echo $namakelas;?>" class="form-control" placeholder="Judul" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Petugas</label>
+                            <div class="mb-3">
+                                <input readonly type="text" value="<?php echo $_SESSION['nip'];?>" name="username" class="form-control" placeholder="NIP" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Total</label>
+                            <div class="mb-3">
+                                <input readonly type="number" value="<?php echo $total;?>"  name="total" class="form-control" placeholder="Total" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Tanggal Pinjam</label>
+                            <div class="mb-3">
+                                <input readonly value="<?php echo $tglpinjam ?>" name="pinjam" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Tanggal Pengembalian</label>
+                            <div class="mb-3">
+                                <input readonly value="<?php echo $tgl ?>" name="tanggal" class="form-control" placeholder="Tanggal" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <!-- <label>Ada</label>
+                            <div class="mb-3">
+                                <input name="ada" class="form-control" placeholder="Ada" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Hilang</label>
+                            <div class="mb-3">
+                                <input name="hilang" class="form-control" placeholder="Hilang" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            <label>Denda</label>
+                            <div class="mb-3">
+                                <input name="denda" class="form-control" placeholder="Denda" aria-label="Email" aria-describedby="email-addon">
+                            </div>
+                            
+                            <div class="text-center">
+                            <button type="submit" name="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Submit</button>
+                            </div> -->
+                        </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+            </div>
             <!-- <div class="posts-list">data</div> -->
 
             <!-- end body content -->
-            <footer class="footer pt-3 my-4">
+            <footer class="footer pt-3">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
@@ -264,9 +328,8 @@ if (!isset($_SESSION['nip'])) {
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal -->    
     <!-- end Modal -->
-
     <!--   Core JS Files   -->
     <script src="..assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -290,3 +353,4 @@ if (!isset($_SESSION['nip'])) {
 </body>
 
 </html>
+

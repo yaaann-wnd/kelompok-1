@@ -47,7 +47,7 @@ if (!isset($_SESSION['nip'])) {
                     <h6 class="font-weight-bolder mb-0">Dashboard</h6>
                     <div class="nama-petugas mt-4">
                         <?php
-                            echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
+                        echo "<h5 class='font-weight-bolder'>Nama Petugas : <span class='text-info text-gradient'>" . $_SESSION['nama_petugas'] . "</span></h5>";
                         ?>
                     </div>
                 </nav>
@@ -60,7 +60,7 @@ if (!isset($_SESSION['nip'])) {
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:localStorage.clear();window.location.href = 'index.html';" class="nav-link text-body font-weight-bold px-0">
+                            <a href="../logout.php" class="nav-link text-danger font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none">Logout</span>
                             </a>
