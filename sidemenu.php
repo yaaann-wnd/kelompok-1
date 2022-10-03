@@ -67,7 +67,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="peminjaman.php">
+        <a class="nav-link" href="../peminjaman/peminjaman.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-book-bookmark text-primary text-sm" aria-hidden="true"></i>
           </div>
@@ -75,11 +75,11 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="history.php">
+        <a class="nav-link" href="../pengembalian/pengembalian.php">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-folder-17 text-primary text-sm" aria-hidden="true"></i>
           </div>
-          <span class="nav-link-text ms-1">History</span>
+          <span class="nav-link-text ms-1">Pengembalian</span>
         </a>
       </li>
     </ul>
